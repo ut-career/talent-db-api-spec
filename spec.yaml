@@ -1,0 +1,126 @@
+openapi: 3.0.2
+info:
+  description: |
+    人材DBサービスAPI
+
+    - [Repository](https://github.com/ut-career/talent-db-api)
+  title: 人材DB
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080
+tags:
+  - description: 認証
+    name: auth
+  - description: 閲覧者
+    name: viewer
+paths:
+  /auth/viewer:
+    post:
+      tags: [auth]
+      summary: 認証
+      description: 認証
+      operationId: auth_viewer
+      x-openapi-router-controller: src.controllers.auth_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        200:
+          description: 認証成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Viewer"
+        400:
+          description: 認証失敗
+    put:
+      tags: [auth]
+      summary: ユーザー登録
+      description: ユーザー登録
+      operationId: register_viewer
+      x-openapi-router-controller: src.controllers.auth_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Viewer"
+      responses:
+        201:
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Viewer"
+        400:
+          description: 登録失敗
+
+  /viewers/{viewer_id}:
+    get:
+      tags: [viewer]
+      summary: 閲覧者取得
+      description: 閲覧者取得
+      operationId: findById
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - name: viewer_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Viewer"
+        404:
+          description: not found
+
+components:
+  schemas:
+    user_id:
+      type: string
+      readOnly: true
+      description: uid
+      example: "5EBsIVfaq6XDXAjUjjvhTSxIvpa2"
+    user_name:
+      type: string
+      example: "dummy name"
+    email:
+      type: string
+      format: email
+      writeOnly: true
+      example: "hoge@hoge.com"
+    password:
+      type: string
+      format: password
+      writeOnly: true
+      example: "secret"
+    AuthRequest:
+      type: object
+      properties:
+        email:
+          $ref: "#/components/schemas/email"
+        password:
+          $ref: "#/components/schemas/password"
+    Viewer:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - password
+      properties:
+        id:
+          $ref: "#/components/schemas/user_id"
+        name:
+          $ref: "#/components/schemas/user_name"
+        email:
+          $ref: "#/components/schemas/email"
+        password:
+          $ref: "#/components/schemas/password"
