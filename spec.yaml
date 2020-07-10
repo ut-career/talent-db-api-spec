@@ -13,12 +13,15 @@ tags:
     name: auth
   - description: 閲覧者
     name: viewer
+security:
+  - jwt: []
 paths:
   /auth/viewer:
     post:
       tags: [auth]
       summary: 認証
-      description: 認証
+      description: 認証し、ユーザーとJWTトークンを返却します
+      security: []
       operationId: auth_viewer
       x-openapi-router-controller: src.controllers.auth_controller
       requestBody:
@@ -33,13 +36,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Viewer"
+                $ref: "#/components/schemas/ViewerAuthed"
         400:
           description: 認証失敗
     put:
       tags: [auth]
       summary: ユーザー登録
       description: ユーザー登録
+      security: []
       operationId: register_viewer
       x-openapi-router-controller: src.controllers.auth_controller
       requestBody:
@@ -54,7 +58,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Viewer"
+                $ref: "#/components/schemas/ViewerAuthed"
         400:
           description: 登録失敗
 
@@ -78,11 +82,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Viewer"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
         404:
           description: not found
 
 components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: src.controllers.auth_controller.jwt_decode
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
   schemas:
+    token:
+      type: string
+      description: JWT認証トークン
+      example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
     user_id:
       type: string
       readOnly: true
@@ -124,3 +143,13 @@ components:
           $ref: "#/components/schemas/email"
         password:
           $ref: "#/components/schemas/password"
+    ViewerAuthed:
+      type: object
+      required:
+        - user
+        - token
+      properties:
+        user:
+          $ref: "#/components/schemas/Viewer"
+        token:
+          $ref: "#/components/schemas/token"
