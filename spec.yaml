@@ -13,6 +13,8 @@ tags:
     name: auth
   - description: 閲覧者
     name: viewer
+  - description: 人材
+    name: talent
 security:
   - jwt: []
 paths:
@@ -87,6 +89,26 @@ paths:
         404:
           description: not found
 
+  /talents:
+    get:
+      tags: [talent]
+      summary: 人材取得
+      description: 人材取得
+      operationId: findTalents
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talents"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+
 components:
   securitySchemes:
     jwt:
@@ -94,6 +116,22 @@ components:
       scheme: bearer
       bearerFormat: JWT
       x-bearerInfoFunc: src.controllers.auth_controller.jwt_decode
+  parameters:
+    page:
+      name: page
+      description: page
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/page"
+    limit:
+      name: limit
+      description: limit
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/limit"
+
   responses:
     UnauthorizedError:
       description: Access token is missing or invalid
@@ -102,6 +140,23 @@ components:
       type: string
       description: JWT認証トークン
       example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+    page:
+      type: integer
+      default: 1
+      example: 3
+      minimum: 1
+    limit:
+      type: integer
+      default: 25
+      example: 50
+      minimum: 0
+      maximum: 200
+    uuid:
+      type: string
+      format: uuid
+      readOnly: true
+      description: uuid
+      example: "12rRjru478DDjdht8h33k"
     user_id:
       type: string
       readOnly: true
@@ -120,9 +175,40 @@ components:
       format: password
       writeOnly: true
       example: "secret"
+    year_month:
+      type: string
+      pattern: '^\d{4}-\d{2}$'
+      example: "2010-04"
     AuthRequest:
       type: object
       properties:
+        email:
+          $ref: "#/components/schemas/email"
+        password:
+          $ref: "#/components/schemas/password"
+    Paging:
+      type: object
+      properties:
+        page:
+          $ref: "#/components/schemas/page"
+        limit:
+          $ref: "#/components/schemas/limit"
+        total:
+          type: integer
+          minimum: 0
+          example: 249
+    Supplier:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - password
+      properties:
+        id:
+          $ref: "#/components/schemas/user_id"
+        name:
+          $ref: "#/components/schemas/user_name"
         email:
           $ref: "#/components/schemas/email"
         password:
@@ -153,3 +239,190 @@ components:
           $ref: "#/components/schemas/Viewer"
         token:
           $ref: "#/components/schemas/token"
+    Family:
+      type: object
+      properties:
+        name:
+          type: string
+          example: UT 花子
+        relationship:
+          type: string
+          description: 続柄
+          example: 妻
+    Education:
+      type: object
+      required:
+        - name
+        - enrollment_year_month
+      properties:
+        name:
+          type: string
+          example: "UT大学"
+        enrollment_year_month:
+          $ref: "#/components/schemas/year_month"
+        graduation_year_month:
+          $ref: "#/components/schemas/year_month"
+        category:
+          type: string
+          example: 大学
+        course:
+          type: string
+          example: 経営学部経営学科
+        humanismOrScience:
+          type: string
+          description: 文系理系
+          example: 理系
+    Resume:
+      type: object
+      required:
+        - company_name
+      properties:
+        company_name:
+          type: string
+          example: UT・キャリア
+        joined_year_month:
+          $ref: "#/components/schemas/year_month"
+        leaved_year_month:
+          $ref: "#/components/schemas/year_month"
+        busuiness_detail:
+          type: string
+          description: 事業内容
+          example: 有料職業紹介
+        number_of_employees:
+          type: integer
+          example: 300
+        employment_type:
+          type: string
+          description: 雇用形態
+          example: 正社員
+        section:
+          type: string
+          description: 部署
+          example: システム部
+        position:
+          type: string
+          description: 役職
+          example: 部長
+        industry:
+          type: string
+          description: 業種
+          example: 人材
+        job:
+          type: string
+          description: 職種
+          example: 営業
+        description:
+          type: string
+          description: 業務内容
+          example: |
+            既存の法人に対しての営業を行っていました。
+            営業時には以下のようなことを意識していました。
+            ・
+            ・
+            ・
+    Talent:
+      type: object
+      required:
+        - id
+        - supplier
+        - name
+        - email
+      properties:
+        id:
+          $ref: "#/components/schemas/uuid"
+        supplier:
+          $ref: "#/components/schemas/Supplier"
+        name:
+          type: string
+          example: UT 太郎
+        name_kana:
+          type: string
+          description: 氏名ふりがな
+          example: ゆーてぃー たろう
+        email:
+          type: string
+          format: email
+          example: "hoge@hoge.com"
+        phone_number:
+          type: string
+          example: "08004859483"
+        sex:
+          type: string
+          enum:
+            - 男性
+            - 女性
+            - その他
+          example: 男性
+        birthday:
+          type: string
+          format: date
+          example: "1993-09-14"
+        prefecture:
+          type: string
+          description: 都道府県名
+          example: 東京都
+        prefecture_kana:
+          type: string
+          description: 都道府県名ふりがな
+          example: とうきょうと
+        city:
+          type: string
+          description: 市区町村
+          example: 港区
+        city_kana:
+          type: string
+          description: 市区町村ふりがな
+          example: みなとく
+        address_line1:
+          type: string
+          description: 番地等
+          example: 5-134
+        address_line1_kana:
+          type: string
+          description: 番地等ふりがな
+          example: 5-134
+        address_line2:
+          type: string
+          description: 建物名、部屋番号
+          example: UTビル21階
+        address_line2_kana:
+          type: string
+          description: 建物名、部屋番号ふりがな
+          example: ゆーてぃーびる21かい
+        last_annual_salary:
+          type: integer
+          description: 直近年収
+          example: 6000000
+        dependent_families:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Family"
+        has_spouse:
+          type: boolean
+          default: null
+          example: true
+        educations:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Education"
+        resume_summary:
+          type: string
+          description: 職歴要約
+          example: 新卒で営業を3年行い、その後転職してWebマーケティングを5年
+        resumes:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Resume"
+    Talents:
+      type: object
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        talents:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Talent"
