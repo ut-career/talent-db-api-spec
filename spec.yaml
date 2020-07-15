@@ -181,6 +181,9 @@ components:
       example: "2010-04"
     AuthRequest:
       type: object
+      required:
+        - email
+        - password
       properties:
         email:
           $ref: "#/components/schemas/email"
@@ -200,10 +203,7 @@ components:
     Supplier:
       type: object
       required:
-        - id
         - name
-        - email
-        - password
       properties:
         id:
           $ref: "#/components/schemas/user_id"
@@ -216,10 +216,7 @@ components:
     Viewer:
       type: object
       required:
-        - id
         - name
-        - email
-        - password
       properties:
         id:
           $ref: "#/components/schemas/user_id"
