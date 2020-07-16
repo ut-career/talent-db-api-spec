@@ -109,6 +109,26 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
 
+    post:
+      tags: [talent]
+      summary: 人材登録
+      description: 人材登録
+      operationId: add_talent
+      x-openapi-router-controller: src.controllers.talent_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Talent"
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talent"
+
 components:
   securitySchemes:
     jwt:
@@ -154,7 +174,6 @@ components:
     uuid:
       type: string
       format: uuid
-      readOnly: true
       description: uuid
       example: "12rRjru478DDjdht8h33k"
     user_id:
@@ -320,15 +339,19 @@ components:
     Talent:
       type: object
       required:
-        - id
-        - supplier
         - name
         - email
       properties:
         id:
           $ref: "#/components/schemas/uuid"
         supplier:
-          $ref: "#/components/schemas/Supplier"
+          allOf:
+            - $ref: "#/components/schemas/Supplier"
+            - readOnly: true
+        supplier_id:
+          allOf:
+            - $ref: "#/components/schemas/uuid"
+            - writeOnly: true
         name:
           type: string
           example: UT 太郎
