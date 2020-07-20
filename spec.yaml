@@ -422,6 +422,12 @@ components:
           type: boolean
           default: null
           example: true
+        certifications:
+          type: array
+          default: []
+          items:
+            type: string
+            example: 普通自動車免許
         educations:
           type: array
           default: []
