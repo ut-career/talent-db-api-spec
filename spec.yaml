@@ -18,6 +18,28 @@ tags:
 security:
   - api_key: []
 paths:
+  /auth/supplier:
+    post:
+      tags: [auth]
+      summary: 認証
+      description: 認証し、ユーザーを返却します
+      operationId: auth_supplier
+      x-openapi-router-controller: src.controllers.auth_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        200:
+          description: 認証成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Supplier"
+        400:
+          description: 認証失敗
   /auth/viewer:
     post:
       tags: [auth]
@@ -97,6 +119,11 @@ paths:
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/limit"
+        - name: supplier_id
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/user_id"
       responses:
         200:
           description: OK
