@@ -11,6 +11,8 @@ servers:
 tags:
   - description: 認証
     name: auth
+  - description: 提供者
+    name: supplier
   - description: 閲覧者
     name: viewer
   - description: 人材
@@ -109,6 +111,33 @@ paths:
         404:
           description: not found
 
+  /suppliers/{supplier_id}/talents:
+    get:
+      tags: [supplier]
+      summary: 閲覧者取得
+      description: 閲覧者取得
+      operationId: supplier_get_talents
+      x-openapi-router-controller: src.controllers.supplier_controller
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - name: supplier_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talents"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+
   /talents:
     get:
       tags: [talent]
@@ -199,7 +228,6 @@ components:
       example: "12rRjru478DDjdht8h33k"
     user_id:
       type: string
-      readOnly: true
       description: uid
       example: "5EBsIVfaq6XDXAjUjjvhTSxIvpa2"
     user_name:
@@ -246,6 +274,7 @@ components:
         - name
       properties:
         id:
+          readOnly: true
           $ref: "#/components/schemas/user_id"
         name:
           $ref: "#/components/schemas/user_name"
@@ -259,6 +288,7 @@ components:
         - name
       properties:
         id:
+          readOnly: true
           $ref: "#/components/schemas/user_id"
         name:
           $ref: "#/components/schemas/user_name"
@@ -352,17 +382,18 @@ components:
       required:
         - name
         - email
+        - publish_begin_date
       properties:
         id:
           $ref: "#/components/schemas/uuid"
         supplier:
+          readOnly: true
           allOf:
             - $ref: "#/components/schemas/Supplier"
-            - readOnly: true
         supplier_id:
+          writeOnly: true
           allOf:
-            - $ref: "#/components/schemas/uuid"
-            - writeOnly: true
+            - $ref: "#/components/schemas/user_id"
         name:
           type: string
           example: UT 太郎
@@ -453,6 +484,34 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/Resume"
+        objective:
+          type: string
+          description: 希望職種
+          example: 営業
+        preferred_work_location:
+          type: string
+          description: 希望勤務地
+          example: 東京
+        commutable_time:
+          type: string
+          description: 通勤可能時間
+          example: 30分
+        desired_salary:
+          type: integer
+          description: 希望年収
+          example: 6000000
+        publish_begin_date:
+          type: string
+          format: date
+          description: 掲載開始日
+          example: "2020-07-01"
+        publish_end_date:
+          type: string
+          format: date
+          description: 掲載終了日
+          default: "2099-12-31"
+          example: "2020-07-01"
+
     Talents:
       type: object
       properties:
