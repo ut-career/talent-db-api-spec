@@ -42,6 +42,8 @@ paths:
                 $ref: "#/components/schemas/Supplier"
         400:
           description: 認証失敗
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
   /auth/viewer:
     post:
       tags: [auth]
@@ -64,6 +66,8 @@ paths:
                 $ref: "#/components/schemas/Viewer"
         400:
           description: 認証失敗
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
     put:
       tags: [auth]
       summary: ユーザー登録
@@ -85,6 +89,75 @@ paths:
                 $ref: "#/components/schemas/Viewer"
         400:
           description: 登録失敗
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+  /auth/talent:
+    post:
+      tags: [auth]
+      summary: 認証
+      description: 認証し、ユーザーを返却します。
+      operationId: auth_talent
+      x-openapi-router-controller: src.controllers.auth_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        200:
+          description: 認証成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talent"
+        400:
+          description: 認証失敗
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+    put:
+      tags: [auth]
+      summary: ユーザー登録
+      description: ユーザー登録
+      operationId: register_talent
+      x-openapi-router-controller: src.controllers.auth_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        201:
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talent"
+        400:
+          description: 登録失敗
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+  /auth/talent:sendEmailVerification:
+    post:
+      tags: [auth]
+      summary: 認証
+      description: ユーザーにアドレス確認メールを送信
+      operationId: send_email_verification_to_talent
+      x-openapi-router-controller: src.controllers.auth_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        202:
+          description: アドレス確認メールの送信依頼を受理しました。
+        400:
+          description: 認証失敗
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
 
   /viewers/{viewer_id}:
     get:
@@ -176,12 +249,14 @@ paths:
             schema:
               $ref: "#/components/schemas/Talent"
       responses:
-        "201":
+        201:
           description: OK
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Talent"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
 
 components:
   securitySchemes:
@@ -208,7 +283,7 @@ components:
 
   responses:
     UnauthorizedError:
-      description: Access token is missing or invalid
+      description: API KEY is missing or invalid
   schemas:
     page:
       type: integer
