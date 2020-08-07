@@ -377,6 +377,19 @@ components:
             ・
             ・
             ・
+    CV:
+      type: object
+      description: 職務経歴
+      properties:
+        summary:
+          type: string
+          description: 職歴要約
+          example: 新卒で営業を3年行い、その後転職してWebマーケティングを5年
+        detail:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Resume"
     Talent:
       type: object
       required:
@@ -419,12 +432,18 @@ components:
           type: string
           format: date
           example: "1993-09-14"
+        zip_code:
+          type: string
+          pattern: "^[0-9]{7}$"
+          description: 郵便番号
+          example: "1050003"
         prefecture:
           type: string
           description: 都道府県名
           example: 東京都
         prefecture_kana:
           type: string
+          readOnly: true
           description: 都道府県名ふりがな
           example: とうきょうと
         city:
@@ -475,15 +494,8 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/Education"
-        resume_summary:
-          type: string
-          description: 職歴要約
-          example: 新卒で営業を3年行い、その後転職してWebマーケティングを5年
-        resumes:
-          type: array
-          default: []
-          items:
-            $ref: "#/components/schemas/Resume"
+        cv:
+          $ref: "#/components/schemas/CV"
         objective:
           type: string
           description: 希望職種
