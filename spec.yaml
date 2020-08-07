@@ -399,14 +399,8 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/uuid"
-        supplier:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/Supplier"
         supplier_id:
-          writeOnly: true
-          allOf:
-            - $ref: "#/components/schemas/user_id"
+          $ref: "#/components/schemas/user_id"
         name:
           type: string
           example: UT 太郎
