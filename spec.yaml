@@ -544,6 +544,7 @@ components:
           example: "08004859483"
         sex:
           type: string
+          nullable: true
           enum:
             - 男性
             - 女性
