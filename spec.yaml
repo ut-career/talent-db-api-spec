@@ -522,9 +522,7 @@ components:
     Talent:
       type: object
       required:
-        - name
         - email
-        - publish_begin_date
       properties:
         id:
           $ref: "#/components/schemas/uuid"
