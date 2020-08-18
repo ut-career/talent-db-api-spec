@@ -454,7 +454,7 @@ components:
         course:
           type: string
           example: 経営学部経営学科
-        humanismOrScience:
+        humanism_or_science:
           type: string
           description: 文系理系
           example: 理系
