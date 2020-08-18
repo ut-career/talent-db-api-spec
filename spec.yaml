@@ -458,6 +458,46 @@ components:
           type: string
           description: 文系理系
           example: 理系
+    StudentDays:
+      type: object
+      properties:
+        self_pr:
+          type: string
+          description: 自己PR
+          example: |
+            高校では
+            これこれこうこう
+            大学では
+            これこれだいだい
+            ・
+        hardest_tried:
+          type: string
+          description: 力をいれたこと
+          example: |
+            私はこれこれに
+            力をいれました
+            ・
+        work_experience:
+          type: string
+          description: 就業経験
+          example: |
+            私はこんな就業を
+            何年やりました
+            ・
+        difficulty:
+          type: string
+          description: 困難と感じた経験
+          example: |
+            私はこれで困難を感じた
+            そのときこうして乗り越えた
+            ・
+        strong_and_weak:
+          type: string
+          description: 長所・短所
+          example: |
+            長所はこれこれ
+            短所はこれこれ
+            ・
     Resume:
       type: object
       required:
@@ -618,6 +658,11 @@ components:
             $ref: "#/components/schemas/Education"
         cv:
           $ref: "#/components/schemas/CV"
+        student_days:
+          type: object
+          properties:
+            detail:
+              $ref: "#/components/schemas/StudentDays"
         objective:
           type: string
           description: 希望職種
@@ -726,6 +771,8 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/Education"
+        student_days:
+          $ref: "#/components/schemas/StudentDays"
         cv:
           $ref: "#/components/schemas/CV"
         objective:
