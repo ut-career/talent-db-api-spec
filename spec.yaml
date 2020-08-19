@@ -753,7 +753,6 @@ components:
           example: 6000000
         dependent_families:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/Family"
         has_spouse:
@@ -762,13 +761,11 @@ components:
           example: true
         certifications:
           type: array
-          default: []
           items:
             type: string
             example: 普通自動車免許
         educations:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/Education"
         student_days:
