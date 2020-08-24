@@ -221,11 +221,21 @@ paths:
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/limit"
-        - name: q
+        - name: objective
           in: query
-          style: deepObject
+          required: false
           schema:
-            $ref: "#/components/schemas/Talent"
+            type: string
+        - name: preferred_work_location
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: desired_salary
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         200:
           description: OK
