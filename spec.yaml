@@ -673,14 +673,27 @@ components:
           properties:
             detail:
               $ref: "#/components/schemas/StudentDays"
-        objective:
-          type: string
+        desired_industries:
+          type: array
+          description: 希望業界
+          default: []
+          items:
+            type: string
+          example: ["IT・通信・インターネット", "商社"]
+        objectives:
+          type: array
           description: 希望職種
-          example: 営業
-        preferred_work_location:
-          type: string
+          default: []
+          items:
+            type: string
+          example: ["法人営業", "社内SE"]
+        preferred_work_locations:
+          type: array
           description: 希望勤務地
-          example: 東京
+          default: []
+          items:
+            type: string
+          example: ["東京都", "神奈川県"]
         commutable_time:
           type: string
           description: 通勤可能時間
@@ -782,14 +795,24 @@ components:
           $ref: "#/components/schemas/StudentDays"
         cv:
           $ref: "#/components/schemas/CV"
-        objective:
-          type: string
+        desired_industries:
+          type: array
+          description: 希望業界
+          items:
+            type: string
+          example: ["IT・通信・インターネット", "商社"]
+        objectives:
+          type: array
           description: 希望職種
-          example: 営業
-        preferred_work_location:
-          type: string
+          items:
+            type: string
+          example: ["法人営業", "社内SE"]
+        preferred_work_locations:
+          type: array
           description: 希望勤務地
-          example: 東京
+          items:
+            type: string
+          example: ["東京都", "神奈川県"]
         commutable_time:
           type: string
           description: 通勤可能時間
