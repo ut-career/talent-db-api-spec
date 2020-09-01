@@ -158,6 +158,25 @@ paths:
           description: 認証失敗
         401:
           $ref: "#/components/responses/UnauthorizedError"
+  /auth/talent:changeEmail:
+    post:
+      tags: [auth]
+      summary: メールアドレス変更
+      operationId: change_email_for_talent
+      x-openapi-router-controller: src.controllers.auth_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeEmailRequest"
+      responses:
+        200:
+          description: OK
+        400:
+          description: 認証失敗
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
 
   /viewers/{viewer_id}:
     get:
@@ -401,6 +420,15 @@ components:
           $ref: "#/components/schemas/email"
         password:
           $ref: "#/components/schemas/password"
+    ChangeEmailRequest:
+      allOf:
+        - $ref: "#/components/schemas/AuthRequest"
+        - type: object
+          required:
+            - email_new
+          properties:
+            email_new:
+              $ref: "#/components/schemas/email"
     Paging:
       type: object
       properties:
