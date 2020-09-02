@@ -478,6 +478,16 @@ components:
           type: string
           description: 続柄
           example: 妻
+    Certification:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: 普通自動車免許
+        acquired_year_month:
+          $ref: "#/components/schemas/year_month"
     Education:
       type: object
       required:
@@ -692,8 +702,7 @@ components:
           type: array
           default: []
           items:
-            type: string
-            example: 普通自動車免許
+            $ref: "#/components/schemas/Certification"
         educations:
           type: array
           default: []
