@@ -826,9 +826,9 @@ components:
           example: true
         certifications:
           type: array
+          default: []
           items:
-            type: string
-            example: 普通自動車免許
+            $ref: "#/components/schemas/Certification"
         educations:
           type: array
           items:
