@@ -300,11 +300,7 @@ paths:
       operationId: find_talent
       x-openapi-router-controller: src.controllers.talent_controller
       parameters:
-        - name: talent_id
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/uuid"
+        - $ref: "#/components/parameters/talent_id"
       responses:
         200:
           description: OK
@@ -323,11 +319,7 @@ paths:
       operationId: update_talent
       x-openapi-router-controller: src.controllers.talent_controller
       parameters:
-        - name: talent_id
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/uuid"
+        - $ref: "#/components/parameters/talent_id"
       requestBody:
         required: true
         content:
@@ -341,6 +333,57 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Talent"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+
+  /talents/{talent_id}/contacts:
+    post:
+      tags: [talent]
+      summary: コンタクト作成
+      description: コンタクト作成
+      operationId: create_contact
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/talent_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactCreate"
+      responses:
+        201:
+          description: OK
+        400:
+          description: bad request
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+
+  /talents/{talent_id}/contacts/{contact_id}:
+    get:
+      tags: [talent]
+      summary: コンタクト取得
+      description: コンタクト取得
+      operationId: find_contact
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/talent_id"
+        - name: contact_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -368,6 +411,12 @@ components:
       required: false
       schema:
         $ref: "#/components/schemas/limit"
+    talent_id:
+      name: talent_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/uuid"
 
   responses:
     UnauthorizedError:
@@ -885,3 +934,59 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/Talent"
+
+    ContactCreate:
+      type: object
+      required:
+        - viewer_id
+        - title
+        - message
+      properties:
+        viewer_id:
+          $ref: "#/components/schemas/user_id"
+        title:
+          type: string
+          example: コンタクト件名例
+        message:
+          type: string
+          example: コンタクトメッセージ内容例
+    Contact:
+      type: object
+      required:
+        - id
+        - talent
+        - viewer_id
+        - title
+        - message
+        - status
+        - send_datetime
+        - send_count
+      properties:
+        id:
+          $ref: "#/components/schemas/uuid"
+        talent:
+          $ref: "#/components/schemas/Talent"
+        viewer_id:
+          $ref: "#/components/schemas/user_id"
+        title:
+          type: string
+          example: コンタクト件名例
+        message:
+          type: string
+          example: コンタクトメッセージ内容例
+        status:
+          type: string
+          enum:
+            - 未読
+            - 打診中
+            - 応募済み
+            - 辞退
+          example: 打診中
+        send_datetime:
+          type: string
+          format: date-time
+          example: "2020-09-10T09:12:28Z"
+        send_count:
+          description: コンタクト回数
+          type: integer
+          example: 1
