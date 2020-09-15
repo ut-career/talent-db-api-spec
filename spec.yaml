@@ -946,6 +946,7 @@ components:
           $ref: "#/components/schemas/user_id"
         title:
           type: string
+          maxLength: 50
           example: コンタクト件名例
         message:
           type: string
@@ -970,6 +971,7 @@ components:
           $ref: "#/components/schemas/user_id"
         title:
           type: string
+          maxLength: 50
           example: コンタクト件名例
         message:
           type: string
