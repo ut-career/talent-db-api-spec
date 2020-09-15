@@ -977,11 +977,11 @@ components:
         status:
           type: string
           enum:
-            - 未読
-            - 打診中
-            - 応募済み
-            - 辞退
-          example: 打診中
+            - UNREAD
+            - READ
+            - ACCEPTED
+            - REFUSED
+          example: UNREAD
         send_datetime:
           type: string
           format: date-time
