@@ -186,11 +186,7 @@ paths:
       operationId: findById
       x-openapi-router-controller: src.controllers.viewer_controller
       parameters:
-        - name: viewer_id
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/viewer_id"
       responses:
         200:
           description: 取得成功
@@ -202,12 +198,34 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           description: not found
+  /viewers/{viewer_id}/contacts:
+    get:
+      tags: [viewer]
+      summary: 閲覧者コンタクト一覧取得
+      description: 閲覧者コンタクト一覧取得
+      operationId: viewer_get_contacts
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/viewer_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contacts"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
 
   /suppliers/{supplier_id}/talents:
     get:
       tags: [supplier]
-      summary: 閲覧者取得
-      description: 閲覧者取得
+      summary: 供給者取得
+      description: 供給者取得
       operationId: supplier_get_talents
       x-openapi-router-controller: src.controllers.supplier_controller
       parameters:
@@ -411,6 +429,12 @@ components:
       required: false
       schema:
         $ref: "#/components/schemas/limit"
+    viewer_id:
+      name: viewer_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/user_id"
     talent_id:
       name: talent_id
       in: path
@@ -992,3 +1016,13 @@ components:
           description: コンタクト回数
           type: integer
           example: 1
+    Contacts:
+      type: object
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        contacts:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Contact"
