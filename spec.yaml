@@ -390,11 +390,7 @@ paths:
       x-openapi-router-controller: src.controllers.talent_controller
       parameters:
         - $ref: "#/components/parameters/talent_id"
-        - name: contact_id
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/uuid"
+        - $ref: "#/components/parameters/contact_id"
       responses:
         200:
           description: OK
@@ -402,6 +398,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Contact"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+  /talents/{talent_id}/contacts/{contact_id}:accept:
+    post:
+      tags: [talent]
+      summary: コンタクト承認
+      description: コンタクト承認
+      operationId: accept_contact
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/talent_id"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+  /talents/{talent_id}/contacts/{contact_id}:refuse:
+    post:
+      tags: [talent]
+      summary: コンタクト辞退
+      description: コンタクト辞退
+      operationId: refuse_contact
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/talent_id"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: OK
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -437,6 +467,12 @@ components:
         $ref: "#/components/schemas/user_id"
     talent_id:
       name: talent_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/uuid"
+    contact_id:
+      name: contact_id
       in: path
       required: true
       schema:
