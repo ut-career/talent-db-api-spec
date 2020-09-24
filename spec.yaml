@@ -418,7 +418,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Contact"
+                $ref: "#/components/schemas/TalentContact"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
