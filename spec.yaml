@@ -357,6 +357,27 @@ paths:
           description: not found
 
   /talents/{talent_id}/contacts:
+    get:
+      tags: [talent]
+      summary: コンタクト一覧
+      description: コンタクト一覧
+      operationId: find_contacts
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/talent_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentContacts"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
     post:
       tags: [talent]
       summary: コンタクト作成
@@ -1011,6 +1032,41 @@ components:
         message:
           type: string
           example: コンタクトメッセージ内容例
+    ContactBase:
+      type: object
+      required:
+        - id
+        - title
+        - message
+        - status
+        - send_datetime
+        - send_count
+      properties:
+        id:
+          $ref: "#/components/schemas/uuid"
+        title:
+          type: string
+          maxLength: 50
+          example: コンタクト件名例
+        message:
+          type: string
+          example: コンタクトメッセージ内容例
+        status:
+          type: string
+          enum:
+            - UNREAD
+            - READ
+            - ACCEPTED
+            - REFUSED
+          example: UNREAD
+        send_datetime:
+          type: string
+          format: date-time
+          example: "2020-09-10T09:12:28Z"
+        send_count:
+          description: コンタクト回数
+          type: integer
+          example: 1
     Contact:
       type: object
       required:
@@ -1062,3 +1118,20 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/Contact"
+    TalentContact:
+      allOf:
+        - $ref: "#/components/schemas/ContactBase"
+        - type: object
+          properties:
+            viewer:
+              $ref: "#/components/schemas/Viewer"
+    TalentContacts:
+      type: object
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        contacts:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/TalentContact"
