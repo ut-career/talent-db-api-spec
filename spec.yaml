@@ -198,6 +198,84 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           description: not found
+  /viewers/{viewer_id}/contactTemplates:
+    get:
+      tags: [viewer]
+      summary: コンタクトテンプレート一覧取得
+      description: コンタクトテンプレート一覧取得
+      operationId: viewer_get_contact_templates
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactTemplates"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+    put:
+      tags: [viewer]
+      summary: コンタクトテンプレート一件作成・更新
+      description: viewer_idとtitleをキーにして作成・上書き更新を行います。
+      operationId: viewer_put_contact_template
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactTemplate"
+      responses:
+        200:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactTemplate"
+        201:
+          description: 作成成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactTemplate"
+        400:
+          description: bad request
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+  /viewers/{viewer_id}/contactTemplates/{contact_template_id}:
+    delete:
+      tags: [viewer]
+      summary: コンタクトテンプレート一件削除
+      description: 指定したcontact templateを削除します。
+      operationId: viewer_delete_contact_template
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+        - name: contact_template_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 削除成功。一覧を返却します。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactTemplates"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
   /viewers/{viewer_id}/contacts:
     get:
       tags: [viewer]
@@ -1135,3 +1213,20 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/TalentContact"
+    ContactTemplate:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/uuid"
+        title:
+          type: string
+          maxLength: 50
+          example: コンタクト件名例
+        message:
+          type: string
+          example: コンタクトメッセージ内容例
+    ContactTemplates:
+      type: array
+      default: []
+      items:
+        $ref: "#/components/schemas/ContactTemplate"
