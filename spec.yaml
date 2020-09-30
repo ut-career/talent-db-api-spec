@@ -231,16 +231,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ContactTemplate"
+              $ref: "#/components/schemas/ContactTemplateBase"
       responses:
         200:
-          description: 更新成功
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ContactTemplate"
-        201:
-          description: 作成成功
+          description: 成功
           content:
             application/json:
               schema:
@@ -1213,11 +1207,15 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/TalentContact"
-    ContactTemplate:
+    ContactTemplateBase:
       type: object
+      required:
+        - name
       properties:
-        id:
-          $ref: "#/components/schemas/uuid"
+        name:
+          type: string
+          maxLength: 50
+          example: template名例
         title:
           type: string
           maxLength: 50
@@ -1225,6 +1223,15 @@ components:
         message:
           type: string
           example: コンタクトメッセージ内容例
+    ContactTemplate:
+      allOf:
+        - $ref: "#/components/schemas/ContactTemplateBase"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              $ref: "#/components/schemas/uuid"
     ContactTemplates:
       type: array
       default: []
