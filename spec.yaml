@@ -371,7 +371,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Talent"
+              $ref: "#/components/schemas/TalentCreate"
       responses:
         201:
           description: OK
@@ -814,6 +814,154 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/Resume"
+    TalentBase:
+      type: object
+      properties:
+        supplier_id:
+          $ref: "#/components/schemas/user_id"
+        sex:
+          type: string
+          nullable: true
+          enum:
+            - 男性
+            - 女性
+            - その他
+          example: 男性
+        birthday:
+          type: string
+          format: date
+          example: "1993-09-14"
+        prefecture:
+          type: string
+          description: 都道府県名
+          example: 東京都
+        prefecture_kana:
+          type: string
+          readOnly: true
+          description: 都道府県名ふりがな
+          example: とうきょうと
+        city:
+          type: string
+          description: 市区町村
+          example: 港区
+        city_kana:
+          type: string
+          description: 市区町村ふりがな
+          example: みなとく
+        last_annual_salary:
+          type: integer
+          description: 直近年収
+          example: 6000000
+        certifications:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Certification"
+        educations:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Education"
+        cv:
+          $ref: "#/components/schemas/CV"
+        student_days:
+          type: object
+          properties:
+            detail:
+              $ref: "#/components/schemas/StudentDays"
+        desired_industries:
+          type: array
+          description: 希望業界
+          default: []
+          items:
+            type: string
+          example: ["IT・通信・インターネット", "商社"]
+        objectives:
+          type: array
+          description: 希望職種
+          default: []
+          items:
+            type: string
+          example: ["法人営業", "社内SE"]
+        preferred_work_locations:
+          type: array
+          description: 希望勤務地
+          default: []
+          items:
+            type: string
+          example: ["東京都", "神奈川県"]
+        commutable_time:
+          type: string
+          description: 通勤可能時間
+          example: 30分
+        desired_salary:
+          type: integer
+          description: 希望年収
+          example: 6000000
+        publish_begin_date:
+          type: string
+          format: date
+          description: 掲載開始日
+          example: "2020-07-01"
+        publish_end_date:
+          type: string
+          format: date
+          description: 掲載終了日
+          default: "2099-12-31"
+          example: "2020-07-01"
+    TalentSecret:
+      type: object
+      required:
+        - email
+      properties:
+        name:
+          type: string
+          example: UT 太郎
+        name_kana:
+          type: string
+          description: 氏名ふりがな
+          example: ゆーてぃー たろう
+        email:
+          type: string
+          format: email
+          example: "hoge@hoge.com"
+        phone_number:
+          type: string
+          example: "08004859483"
+        zip_code:
+          type: string
+          pattern: "^[0-9]{7}$"
+          description: 郵便番号
+          example: "1050003"
+        address_line1:
+          type: string
+          description: 番地等
+          example: 5-134
+        address_line1_kana:
+          type: string
+          description: 番地等ふりがな
+          example: 5-134
+        address_line2:
+          type: string
+          description: 建物名、部屋番号
+          example: UTビル21階
+        address_line2_kana:
+          type: string
+          description: 建物名、部屋番号ふりがな
+          example: ゆーてぃーびる21かい
+        dependent_families:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Family"
+        has_spouse:
+          type: boolean
+          default: null
+          example: true
+    TalentCreate:
+      allOf:
+        - $ref: "#/components/schemas/TalentBase"
+        - $ref: "#/components/schemas/TalentSecret"
     Talent:
       type: object
       required:
@@ -957,6 +1105,10 @@ components:
           description: 掲載終了日
           default: "2099-12-31"
           example: "2020-07-01"
+        contacts:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/TalentContacts"
     TalentUpdate:
       type: object
       properties:
