@@ -303,11 +303,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/limit"
-        - name: supplier_id
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/supplier_id"
       responses:
         200:
           description: 取得成功
@@ -315,6 +311,53 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Talents"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+  /suppliers/{supplier_id}/children:
+    get:
+      tags: [talent]
+      summary: 供給者紹介者一覧
+      description: 供給者が紹介した供給者の一覧を取得します。
+      operationId: supplier_get_children
+      x-openapi-router-controller: src.controllers.supplier_controller
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/supplier_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierChildren"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+    post:
+      tags: [talent]
+      summary: 供給者紹介者登録
+      description: 供給者の紹介者を登録します。
+      operationId: supplier_register_child
+      x-openapi-router-controller: src.controllers.supplier_controller
+      parameters:
+        - $ref: "#/components/parameters/supplier_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupplierChild"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierChild"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -558,6 +601,12 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/user_id"
+    supplier_id:
+      name: supplier_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/user_id"
     talent_id:
       name: talent_id
       in: path
@@ -642,6 +691,52 @@ components:
           type: integer
           minimum: 0
           example: 249
+    SupplierBase:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          $ref: "#/components/schemas/user_name"
+        parent_id:
+          $ref: "#/components/schemas/user_id"
+    SupplierDetail:
+      allOf:
+        - $ref: "#/components/schemas/SupplierBase"
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/user_id"
+            email:
+              $ref: "#/components/schemas/email"
+    SupplierChild:
+      allOf:
+        - $ref: "#/components/schemas/SupplierBase"
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/user_id"
+            email:
+              $ref: "#/components/schemas/email"
+    SupplierChildCreate:
+      allOf:
+        - $ref: "#/components/schemas/SupplierBase"
+        - type: object
+          required:
+              - email
+          properties:
+            email:
+              $ref: "#/components/schemas/email"
+    SupplierChildren:
+      type: object
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        children:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/SupplierChild"
     Supplier:
       type: object
       required:
