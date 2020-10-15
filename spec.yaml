@@ -317,7 +317,7 @@ paths:
           description: not found
   /suppliers/{supplier_id}/children:
     get:
-      tags: [talent]
+      tags: [supplier]
       summary: 供給者紹介者一覧
       description: 供給者が紹介した供給者の一覧を取得します。
       operationId: supplier_get_children
@@ -338,7 +338,7 @@ paths:
         404:
           description: not found
     post:
-      tags: [talent]
+      tags: [supplier]
       summary: 供給者紹介者登録
       description: 供給者の紹介者を登録します。
       operationId: supplier_register_child
