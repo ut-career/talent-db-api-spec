@@ -292,7 +292,34 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           description: not found
-
+  /suppliers/{supplier_id}:
+    patch:
+      tags: [supplier]
+      summary: 供給者情報更新
+      description: 供給者情報更新
+      operationId: supplier_update
+      x-openapi-router-controller: src.controllers.supplier_controller
+      parameters:
+        - $ref: "#/components/parameters/supplier_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupplierPatch"
+      responses:
+        200:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierDetail"
+        400:
+          description: bad request
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
   /suppliers/{supplier_id}/talents:
     get:
       tags: [supplier]
@@ -650,8 +677,15 @@ components:
     email:
       type: string
       format: email
-      writeOnly: true
       example: "hoge@hoge.com"
+    phone_number:
+      type: string
+      example: "08004859483"
+    zip_code:
+      type: string
+      pattern: "^[0-9]{7}$"
+      description: 郵便番号
+      example: "1050003"
     password:
       type: string
       format: password
@@ -693,40 +727,78 @@ components:
           example: 249
     SupplierBase:
       type: object
-      required:
-        - name
       properties:
         name:
           $ref: "#/components/schemas/user_name"
-        parent_id:
-          $ref: "#/components/schemas/user_id"
-    SupplierDetail:
-      allOf:
-        - $ref: "#/components/schemas/SupplierBase"
-        - type: object
-          properties:
-            id:
-              $ref: "#/components/schemas/user_id"
-            email:
-              $ref: "#/components/schemas/email"
-    SupplierChild:
-      allOf:
-        - $ref: "#/components/schemas/SupplierBase"
-        - type: object
-          properties:
-            id:
-              $ref: "#/components/schemas/user_id"
-            email:
-              $ref: "#/components/schemas/email"
-    SupplierChildCreate:
+        name_kana:
+          type: string
+          example: しめい
+        email:
+          $ref: "#/components/schemas/email"
+        phone_number:
+          $ref: "#/components/schemas/phone_number"
+        zip_code:
+          $ref: "#/components/schemas/zip_code"
+        address:
+          type: string
+          example: 東京都港区新橋1234〇〇ビル5階
+    Supplier:
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
         - type: object
           required:
-              - email
+            - id
+            - name
+            - email
           properties:
-            email:
-              $ref: "#/components/schemas/email"
+            id:
+              $ref: "#/components/schemas/user_id"
+    SupplierDetail:
+      allOf:
+        - $ref: "#/components/schemas/SupplierBase"
+        - type: object
+          required:
+            - id
+            - name
+            - email
+          properties:
+            id:
+              $ref: "#/components/schemas/user_id"
+            parent:
+              $ref: "#/components/schemas/Supplier"
+            children:
+              $ref: "#/components/schemas/SupplierChildren"
+            talents:
+              $ref: "#/components/schemas/Talents"
+    SupplierPatch:
+      allOf:
+        - $ref: "#/components/schemas/SupplierBase"
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/user_id"
+            parent_id:
+              $ref: "#/components/schemas/user_id"
+    SupplierChildBase:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          $ref: "#/components/schemas/user_name"
+        email:
+          $ref: "#/components/schemas/email"
+    SupplierChild:
+      allOf:
+        - $ref: "#/components/schemas/SupplierChildBase"
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/user_id"
+    SupplierChildCreate:
+      allOf:
+        - $ref: "#/components/schemas/SupplierChildBase"
     SupplierChildren:
       type: object
       properties:
@@ -737,20 +809,6 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/SupplierChild"
-    Supplier:
-      type: object
-      required:
-        - name
-      properties:
-        id:
-          readOnly: true
-          $ref: "#/components/schemas/user_id"
-        name:
-          $ref: "#/components/schemas/user_name"
-        email:
-          $ref: "#/components/schemas/email"
-        password:
-          $ref: "#/components/schemas/password"
     Viewer:
       type: object
       required:
@@ -1010,8 +1068,7 @@ components:
         - email
       properties:
         name:
-          type: string
-          example: UT 太郎
+          $ref: "#/components/schemas/user_name"
         name_kana:
           type: string
           description: 氏名ふりがな
@@ -1021,13 +1078,9 @@ components:
           format: email
           example: "hoge@hoge.com"
         phone_number:
-          type: string
-          example: "08004859483"
+          $ref: "#/components/schemas/phone_number"
         zip_code:
-          type: string
-          pattern: "^[0-9]{7}$"
-          description: 郵便番号
-          example: "1050003"
+          $ref: "#/components/schemas/zip_code"
         address_line1:
           type: string
           description: 番地等
@@ -1067,8 +1120,7 @@ components:
         supplier_id:
           $ref: "#/components/schemas/user_id"
         name:
-          type: string
-          example: UT 太郎
+          $ref: "#/components/schemas/user_name"
         name_kana:
           type: string
           description: 氏名ふりがな
@@ -1078,8 +1130,7 @@ components:
           format: email
           example: "hoge@hoge.com"
         phone_number:
-          type: string
-          example: "08004859483"
+          $ref: "#/components/schemas/phone_number"
         sex:
           type: string
           nullable: true
@@ -1093,10 +1144,7 @@ components:
           format: date
           example: "1993-09-14"
         zip_code:
-          type: string
-          pattern: "^[0-9]{7}$"
-          description: 郵便番号
-          example: "1050003"
+          $ref: "#/components/schemas/zip_code"
         prefecture:
           type: string
           description: 都道府県名
@@ -1208,15 +1256,13 @@ components:
       type: object
       properties:
         name:
-          type: string
-          example: UT 太郎
+          $ref: "#/components/schemas/user_name"
         name_kana:
           type: string
           description: 氏名ふりがな
           example: ゆーてぃー たろう
         phone_number:
-          type: string
-          example: "08004859483"
+          $ref: "#/components/schemas/phone_number"
         sex:
           type: string
           enum:
@@ -1229,10 +1275,7 @@ components:
           format: date
           example: "1993-09-14"
         zip_code:
-          type: string
-          pattern: "^[0-9]{7}$"
-          description: 郵便番号
-          example: "1050003"
+          $ref: "#/components/schemas/zip_code"
         prefecture:
           type: string
           description: 都道府県名
