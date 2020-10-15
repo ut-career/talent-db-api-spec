@@ -799,6 +799,10 @@ components:
     SupplierChildCreate:
       allOf:
         - $ref: "#/components/schemas/SupplierChildBase"
+        - type: object
+          properties:
+            name:
+              $ref: "#/components/schemas/user_name"
     SupplierChildren:
       type: object
       properties:
