@@ -741,20 +741,20 @@ components:
           type: string
           example: 東京都港区新橋1234〇〇ビル5階
     Supplier:
-      type: object
-      required:
-        - id
-        - name
-        - email
-      properties:
-        id:
-          $ref: "#/components/schemas/user_id"
-        parent_id:
-          $ref: "#/components/schemas/user_id"
-        email:
-          $ref: "#/components/schemas/email"
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
+        - type: object
+          required:
+            - id
+            - name
+            - email
+          properties:
+            id:
+              $ref: "#/components/schemas/user_id"
+            parent_id:
+              $ref: "#/components/schemas/user_id"
+            email:
+              $ref: "#/components/schemas/email"
     SupplierDetail:
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
