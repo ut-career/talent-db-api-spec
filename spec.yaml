@@ -753,6 +753,8 @@ components:
           properties:
             id:
               $ref: "#/components/schemas/user_id"
+            parent_id:
+              $ref: "#/components/schemas/user_id"
     SupplierDetail:
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
@@ -775,10 +777,8 @@ components:
         - $ref: "#/components/schemas/SupplierBase"
         - type: object
           properties:
-            id:
-              $ref: "#/components/schemas/user_id"
-            parent_id:
-              $ref: "#/components/schemas/user_id"
+            name:
+              $ref: "#/components/schemas/user_name"
     SupplierChildBase:
       type: object
       required:
