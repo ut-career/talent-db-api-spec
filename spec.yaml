@@ -733,8 +733,6 @@ components:
         name_kana:
           type: string
           example: しめい
-        email:
-          $ref: "#/components/schemas/email"
         phone_number:
           $ref: "#/components/schemas/phone_number"
         zip_code:
@@ -743,18 +741,20 @@ components:
           type: string
           example: 東京都港区新橋1234〇〇ビル5階
     Supplier:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          $ref: "#/components/schemas/user_id"
+        parent_id:
+          $ref: "#/components/schemas/user_id"
+        email:
+          $ref: "#/components/schemas/email"
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
-        - type: object
-          required:
-            - id
-            - name
-            - email
-          properties:
-            id:
-              $ref: "#/components/schemas/user_id"
-            parent_id:
-              $ref: "#/components/schemas/user_id"
     SupplierDetail:
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
@@ -766,6 +766,8 @@ components:
           properties:
             id:
               $ref: "#/components/schemas/user_id"
+            email:
+              $ref: "#/components/schemas/email"
             parent:
               $ref: "#/components/schemas/Supplier"
             children:
@@ -773,12 +775,7 @@ components:
             talents:
               $ref: "#/components/schemas/Talents"
     SupplierPatch:
-      allOf:
-        - $ref: "#/components/schemas/SupplierBase"
-        - type: object
-          properties:
-            name:
-              $ref: "#/components/schemas/user_name"
+      $ref: "#/components/schemas/SupplierBase"
     SupplierChildBase:
       type: object
       required:
