@@ -817,6 +817,10 @@ components:
           properties:
             id:
               $ref: "#/components/schemas/user_id"
+            number_of_talents:
+              $ref: "#/components/schemas/positive_integer_include_zero"
+            number_of_accepted_contacts:
+              $ref: "#/components/schemas/positive_integer_include_zero"
     SupplierChildCreate:
       allOf:
         - $ref: "#/components/schemas/SupplierChildBase"
