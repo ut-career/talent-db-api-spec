@@ -838,6 +838,10 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/SupplierChild"
+        number_of_talents:
+          $ref: "#/components/schemas/positive_integer_include_zero"
+        number_of_accepted_contacts:
+          $ref: "#/components/schemas/positive_integer_include_zero"
     Viewer:
       type: object
       required:
