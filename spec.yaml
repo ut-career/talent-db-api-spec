@@ -293,6 +293,27 @@ paths:
         404:
           description: not found
   /suppliers/{supplier_id}:
+    get:
+      tags: [supplier]
+      summary: 供給者取得
+      description: idから供給者を取得します
+      operationId: supplier_find_by_id
+      x-openapi-router-controller: src.controllers.supplier_controller
+      parameters:
+        - $ref: "#/components/parameters/supplier_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierDetail"
+        400:
+          description: bad request
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
     patch:
       tags: [supplier]
       summary: 供給者情報更新
@@ -651,6 +672,11 @@ components:
     UnauthorizedError:
       description: API KEY is missing or invalid
   schemas:
+    positive_integer_include_zero:
+      type: integer
+      default: 0
+      example: 12
+      minimum: 0
     page:
       type: integer
       default: 1
@@ -722,9 +748,7 @@ components:
         limit:
           $ref: "#/components/schemas/limit"
         total:
-          type: integer
-          minimum: 0
-          example: 249
+          $ref: "#/components/schemas/positive_integer_include_zero"
     SupplierBase:
       type: object
       properties:
