@@ -39,7 +39,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Supplier"
+                $ref: "#/components/schemas/SupplierDetail"
         400:
           description: 認証失敗
         401:
@@ -194,6 +194,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Viewer"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+  /viewers/{viewer_id}:searchTalents:
+    get:
+      tags: [viewer]
+      summary: 閲覧者人材検索
+      description: 閲覧者人材検索
+      operationId: viewer_search_talents
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/desired_industry"
+        - $ref: "#/components/parameters/objective"
+        - $ref: "#/components/parameters/preferred_work_location"
+        - $ref: "#/components/parameters/desired_salary"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewerTalents"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -444,26 +470,10 @@ paths:
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/limit"
-        - name: desired_industry
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: objective
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: preferred_work_location
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: desired_salary
-          in: query
-          required: false
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/desired_industry"
+        - $ref: "#/components/parameters/objective"
+        - $ref: "#/components/parameters/preferred_work_location"
+        - $ref: "#/components/parameters/desired_salary"
       responses:
         200:
           description: OK
@@ -690,6 +700,30 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/uuid"
+    desired_industry:
+      name: desired_industry
+      in: query
+      required: false
+      schema:
+        type: string
+    objective:
+      name: objective
+      in: query
+      required: false
+      schema:
+        type: string
+    preferred_work_location:
+      name: preferred_work_location
+      in: query
+      required: false
+      schema:
+        type: string
+    desired_salary:
+      name: desired_salary
+      in: query
+      required: false
+      schema:
+        type: integer
 
   responses:
     UnauthorizedError:
