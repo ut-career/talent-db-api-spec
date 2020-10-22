@@ -358,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Talents"
+                $ref: "#/components/schemas/SupplierTalents"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -820,7 +820,7 @@ components:
             children:
               $ref: "#/components/schemas/SupplierChildren"
             talents:
-              $ref: "#/components/schemas/Talents"
+              $ref: "#/components/schemas/SupplierTalents"
     SupplierPatch:
       $ref: "#/components/schemas/SupplierBase"
     SupplierChildBase:
@@ -1042,11 +1042,6 @@ components:
           type: string
           description: 都道府県名
           example: 東京都
-        prefecture_kana:
-          type: string
-          readOnly: true
-          description: 都道府県名ふりがな
-          example: とうきょうと
         city:
           type: string
           description: 市区町村
@@ -1118,8 +1113,6 @@ components:
           example: "2020-07-01"
     TalentSecret:
       type: object
-      required:
-        - email
       properties:
         name:
           $ref: "#/components/schemas/user_name"
@@ -1127,10 +1120,6 @@ components:
           type: string
           description: 氏名ふりがな
           example: ゆーてぃー たろう
-        email:
-          type: string
-          format: email
-          example: "hoge@hoge.com"
         phone_number:
           $ref: "#/components/schemas/phone_number"
         zip_code:
@@ -1164,263 +1153,28 @@ components:
       allOf:
         - $ref: "#/components/schemas/TalentBase"
         - $ref: "#/components/schemas/TalentSecret"
-    Talent:
-      type: object
-      required:
-        - email
-      properties:
-        id:
-          $ref: "#/components/schemas/uuid"
-        supplier_id:
-          $ref: "#/components/schemas/user_id"
-        name:
-          $ref: "#/components/schemas/user_name"
-        name_kana:
-          type: string
-          description: 氏名ふりがな
-          example: ゆーてぃー たろう
-        email:
-          type: string
-          format: email
-          example: "hoge@hoge.com"
-        phone_number:
-          $ref: "#/components/schemas/phone_number"
-        sex:
-          type: string
-          nullable: true
-          enum:
-            - 男性
-            - 女性
-            - その他
-          example: 男性
-        birthday:
-          type: string
-          format: date
-          example: "1993-09-14"
-        zip_code:
-          $ref: "#/components/schemas/zip_code"
-        prefecture:
-          type: string
-          description: 都道府県名
-          example: 東京都
-        prefecture_kana:
-          type: string
-          readOnly: true
-          description: 都道府県名ふりがな
-          example: とうきょうと
-        city:
-          type: string
-          description: 市区町村
-          example: 港区
-        city_kana:
-          type: string
-          description: 市区町村ふりがな
-          example: みなとく
-        address_line1:
-          type: string
-          description: 番地等
-          example: 5-134
-        address_line1_kana:
-          type: string
-          description: 番地等ふりがな
-          example: 5-134
-        address_line2:
-          type: string
-          description: 建物名、部屋番号
-          example: UTビル21階
-        address_line2_kana:
-          type: string
-          description: 建物名、部屋番号ふりがな
-          example: ゆーてぃーびる21かい
-        last_annual_salary:
-          type: integer
-          description: 直近年収
-          example: 6000000
-        dependent_families:
-          type: array
-          default: []
-          items:
-            $ref: "#/components/schemas/Family"
-        has_spouse:
-          type: boolean
-          default: null
-          example: true
-        certifications:
-          type: array
-          default: []
-          items:
-            $ref: "#/components/schemas/Certification"
-        educations:
-          type: array
-          default: []
-          items:
-            $ref: "#/components/schemas/Education"
-        cv:
-          $ref: "#/components/schemas/CV"
-        student_days:
-          type: object
+        - type: object
+          required:
+            - email
           properties:
-            detail:
-              $ref: "#/components/schemas/StudentDays"
-        desired_industries:
-          type: array
-          description: 希望業界
-          default: []
-          items:
-            type: string
-          example: ["IT・通信・インターネット", "商社"]
-        objectives:
-          type: array
-          description: 希望職種
-          default: []
-          items:
-            type: string
-          example: ["法人営業", "社内SE"]
-        preferred_work_locations:
-          type: array
-          description: 希望勤務地
-          default: []
-          items:
-            type: string
-          example: ["東京都", "神奈川県"]
-        commutable_time:
-          type: string
-          description: 通勤可能時間
-          example: 30分
-        desired_salary:
-          type: integer
-          description: 希望年収
-          example: 6000000
-        publish_begin_date:
-          type: string
-          format: date
-          description: 掲載開始日
-          example: "2020-07-01"
-        publish_end_date:
-          type: string
-          format: date
-          description: 掲載終了日
-          default: "2099-12-31"
-          example: "2020-07-01"
-        contacts:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/TalentContacts"
+            email:
+              $ref: "#/components/schemas/email"
+    Talent:
+      allOf:
+        - $ref: "#/components/schemas/TalentBase"
+        - $ref: "#/components/schemas/TalentSecret"
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/uuid"
+            supplier_id:
+              $ref: "#/components/schemas/user_id"
+            email:
+              $ref: "#/components/schemas/email"
     TalentUpdate:
-      type: object
-      properties:
-        name:
-          $ref: "#/components/schemas/user_name"
-        name_kana:
-          type: string
-          description: 氏名ふりがな
-          example: ゆーてぃー たろう
-        phone_number:
-          $ref: "#/components/schemas/phone_number"
-        sex:
-          type: string
-          enum:
-            - 男性
-            - 女性
-            - その他
-          example: 男性
-        birthday:
-          type: string
-          format: date
-          example: "1993-09-14"
-        zip_code:
-          $ref: "#/components/schemas/zip_code"
-        prefecture:
-          type: string
-          description: 都道府県名
-          example: 東京都
-        city:
-          type: string
-          description: 市区町村
-          example: 港区
-        city_kana:
-          type: string
-          description: 市区町村ふりがな
-          example: みなとく
-        address_line1:
-          type: string
-          description: 番地等
-          example: 5-134
-        address_line1_kana:
-          type: string
-          description: 番地等ふりがな
-          example: 5-134
-        address_line2:
-          type: string
-          description: 建物名、部屋番号
-          example: UTビル21階
-        address_line2_kana:
-          type: string
-          description: 建物名、部屋番号ふりがな
-          example: ゆーてぃーびる21かい
-        last_annual_salary:
-          type: integer
-          description: 直近年収
-          example: 6000000
-        dependent_families:
-          type: array
-          items:
-            $ref: "#/components/schemas/Family"
-        has_spouse:
-          type: boolean
-          default: null
-          example: true
-        certifications:
-          type: array
-          default: []
-          items:
-            $ref: "#/components/schemas/Certification"
-        educations:
-          type: array
-          items:
-            $ref: "#/components/schemas/Education"
-        student_days:
-          $ref: "#/components/schemas/StudentDays"
-        cv:
-          $ref: "#/components/schemas/CV"
-        desired_industries:
-          type: array
-          description: 希望業界
-          items:
-            type: string
-          example: ["IT・通信・インターネット", "商社"]
-        objectives:
-          type: array
-          description: 希望職種
-          items:
-            type: string
-          example: ["法人営業", "社内SE"]
-        preferred_work_locations:
-          type: array
-          description: 希望勤務地
-          items:
-            type: string
-          example: ["東京都", "神奈川県"]
-        commutable_time:
-          type: string
-          description: 通勤可能時間
-          example: 30分
-        desired_salary:
-          type: integer
-          description: 希望年収
-          example: 6000000
-        publish_begin_date:
-          type: string
-          format: date
-          description: 掲載開始日
-          example: "2020-07-01"
-        publish_end_date:
-          type: string
-          format: date
-          description: 掲載終了日
-          default: "2099-12-31"
-          example: "2020-07-01"
-
+      allOf:
+        - $ref: "#/components/schemas/TalentBase"
+        - $ref: "#/components/schemas/TalentSecret"
     Talents:
       type: object
       properties:
@@ -1431,7 +1185,6 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/Talent"
-
     ContactCreate:
       type: object
       required:
@@ -1581,3 +1334,46 @@ components:
       default: []
       items:
         $ref: "#/components/schemas/ContactTemplate"
+    SupplierTalent:
+      allOf:
+        - $ref: "#/components/schemas/Talent"
+        - type: object
+          properties:
+            number_of_contacts:
+              $ref: "#/components/schemas/positive_integer_include_zero"
+            number_of_accepted_contacts:
+              $ref: "#/components/schemas/positive_integer_include_zero"
+    SupplierTalents:
+      type: object
+      description: |
+        number_of_contacts, number_of_accepted_contactsは
+        pageingに関わらず全てのcontactに対して集計します。
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        talents:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/SupplierTalent"
+        number_of_contacts:
+          $ref: "#/components/schemas/positive_integer_include_zero"
+        number_of_accepted_contacts:
+          $ref: "#/components/schemas/positive_integer_include_zero"
+    ViewerTalent:
+      allOf:
+        - $ref: "#/components/schemas/Talent"
+        - type: object
+          properties:
+            contact:
+              $ref: "#/components/schemas/ContactBase"
+    ViewerTalents:
+      type: object
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        talents:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/ViewerTalent"
