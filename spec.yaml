@@ -1023,12 +1023,10 @@ components:
           example: 6000000
         certifications:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/Certification"
         educations:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/Education"
         cv:
@@ -1041,21 +1039,18 @@ components:
         desired_industries:
           type: array
           description: 希望業界
-          default: []
           items:
             type: string
           example: ["IT・通信・インターネット", "商社"]
         objectives:
           type: array
           description: 希望職種
-          default: []
           items:
             type: string
           example: ["法人営業", "社内SE"]
         preferred_work_locations:
           type: array
           description: 希望勤務地
-          default: []
           items:
             type: string
           example: ["東京都", "神奈川県"]
@@ -1109,7 +1104,6 @@ components:
           example: ゆーてぃーびる21かい
         dependent_families:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/Family"
         has_spouse:
