@@ -333,8 +333,12 @@ paths:
             schema:
               $ref: "#/components/schemas/TalentCreate"
       responses:
-        204:
+        201:
           description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talent"
         400:
           description: bad request
         401:
