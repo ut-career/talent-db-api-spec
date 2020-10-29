@@ -392,7 +392,122 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           description: not found
-
+  /talent:
+    get:
+      tags: [talent]
+      summary: 人材取得
+      description: 人材取得
+      operationId: find_talent_by_firebase_id_token
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentDetail"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+    patch:
+      tags: [talent]
+      summary: 人材更新
+      description: 人材更新
+      operationId: update_talent_with_firebase_id_token
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TalentUpdate"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talent"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+  /talent/contacts:
+    get:
+      tags: [talent]
+      summary: コンタクト一覧
+      description: コンタクト一覧
+      operationId: find_contacts_with_firebase_id_token
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentContacts"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+  /talent/contacts/{contact_id}:
+    get:
+      tags: [talent]
+      summary: コンタクト取得
+      description: コンタクト取得
+      operationId: find_contact_with_firebase_id_token
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentContact"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+  /talent/contacts/{contact_id}:accept:
+    post:
+      tags: [talent]
+      summary: コンタクト承認
+      description: コンタクト承認
+      operationId: accept_contact_with_firebase_id_token
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
+  /talent/contacts/{contact_id}:refuse:
+    post:
+      tags: [talent]
+      summary: コンタクト辞退
+      description: コンタクト辞退
+      operationId: refuse_contact_with_firebase_id_token
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          description: not found
   /talents:
     get:
       tags: [talent]
@@ -657,6 +772,11 @@ components:
       required: false
       schema:
         type: integer
+    firebaseIdToken:
+      name: firebaseIdToken
+      in: header
+      schema:
+        type: string
 
   responses:
     UnauthorizedError:
@@ -1136,6 +1256,18 @@ components:
       allOf:
         - $ref: "#/components/schemas/TalentBase"
         - $ref: "#/components/schemas/TalentSecret"
+    TalentDetail:
+      allOf:
+        - $ref: "#/components/schemas/TalentBase"
+        - $ref: "#/components/schemas/TalentSecret"
+        - type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/uuid"
+            email:
+              $ref: "#/components/schemas/email"
+            contacts:
+              $ref: "#/components/schemas/TalentContacts"
     Talents:
       type: object
       properties:
