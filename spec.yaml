@@ -159,6 +159,12 @@ paths:
             minimum: 0
             maximum: 100
             example: 21
+        - name: search
+          description: 全文検索
+          in: query
+          schema:
+            type: string
+            minLength: 2
       responses:
         200:
           description: 取得成功
