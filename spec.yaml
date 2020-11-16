@@ -796,7 +796,7 @@ components:
       schema:
         type: integer
     firebaseIdToken:
-      name: firebaseIdToken
+      name: x-firebase-id-token
       in: header
       schema:
         type: string
@@ -1432,6 +1432,8 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/TalentContact"
+        number_of_unread_contacts:
+          $ref: "#/components/schemas/positive_integer_include_zero"
     ContactTemplateBase:
       type: object
       required:
