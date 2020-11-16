@@ -415,7 +415,7 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           description: not found
-  /talent:
+  /talent/:
     get:
       tags: [talent]
       summary: 人材取得
