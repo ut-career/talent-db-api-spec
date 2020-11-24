@@ -1155,6 +1155,10 @@ components:
             - 男性
             - 女性
             - その他
+          x-enum-varnames:
+            - male
+            - female
+            - other
           example: 男性
         birthday:
           type: string
