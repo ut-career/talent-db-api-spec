@@ -9,8 +9,6 @@ info:
 servers:
   - url: http://localhost:8080
 tags:
-  - description: 認証
-    name: auth
   - description: 提供者
     name: supplier
   - description: 閲覧者
@@ -20,93 +18,6 @@ tags:
 security:
   - api_key: []
 paths:
-  /auth/talent:
-    post:
-      tags: [auth]
-      summary: 認証
-      description: 認証し、ユーザーを返却します。
-      operationId: auth_talent
-      x-openapi-router-controller: src.controllers.auth_controller
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AuthRequest"
-      responses:
-        200:
-          description: 認証成功
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Talent"
-        400:
-          description: 認証失敗
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-    put:
-      tags: [auth]
-      summary: ユーザー登録
-      description: ユーザー登録
-      operationId: register_talent
-      x-openapi-router-controller: src.controllers.auth_controller
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AuthRequest"
-      responses:
-        201:
-          description: 登録成功
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Talent"
-        400:
-          description: 登録失敗
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-  /auth/talent:sendEmailVerification:
-    post:
-      tags: [auth]
-      summary: 認証
-      description: ユーザーにアドレス確認メールを送信
-      operationId: send_email_verification_to_talent
-      x-openapi-router-controller: src.controllers.auth_controller
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AuthRequest"
-      responses:
-        202:
-          description: アドレス確認メールの送信依頼を受理しました。
-        400:
-          description: 認証失敗
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-  /auth/talent:changeEmail:
-    post:
-      tags: [auth]
-      summary: メールアドレス変更
-      operationId: change_email_for_talent
-      x-openapi-router-controller: src.controllers.auth_controller
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ChangeEmailRequest"
-      responses:
-        200:
-          description: OK
-        400:
-          description: 認証失敗
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-
   /viewers/{viewer_id}:
     get:
       tags: [viewer]
@@ -126,7 +37,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /viewers/{viewer_id}:searchTalents:
     get:
       tags: [viewer]
@@ -175,7 +86,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /viewers/{viewer_id}/contactTemplates:
     get:
       tags: [viewer]
@@ -195,7 +106,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
     put:
       tags: [viewer]
       summary: コンタクトテンプレート一件作成・更新
@@ -222,7 +133,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /viewers/{viewer_id}/contactTemplates/{contact_template_id}:
     delete:
       tags: [viewer]
@@ -247,7 +158,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /viewers/{viewer_id}/contacts:
     get:
       tags: [viewer]
@@ -269,7 +180,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /suppliers/{supplier_id}:
     get:
       tags: [supplier]
@@ -291,7 +202,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
     patch:
       tags: [supplier]
       summary: 供給者情報更新
@@ -318,7 +229,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /suppliers/{supplier_id}/talents:
     get:
       tags: [supplier]
@@ -340,7 +251,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
     post:
       tags: [supplier]
       summary: 人材登録
@@ -367,7 +278,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /suppliers/{supplier_id}/children:
     get:
       tags: [supplier]
@@ -389,7 +300,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
     post:
       tags: [supplier]
       summary: 供給者紹介者登録
@@ -414,7 +325,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /talent/:
     get:
       tags: [talent]
@@ -496,7 +407,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /talent/contacts/{contact_id}:accept:
     post:
       tags: [talent]
@@ -513,7 +424,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
   /talent/contacts/{contact_id}:refuse:
     post:
       tags: [talent]
@@ -530,121 +441,9 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
-  /talents:
-    get:
-      tags: [talent]
-      summary: 人材取得
-      description: 人材取得
-      operationId: findTalents
-      x-openapi-router-controller: src.controllers.talent_controller
-      parameters:
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/desired_industry"
-        - $ref: "#/components/parameters/objective"
-        - $ref: "#/components/parameters/preferred_work_location"
-        - $ref: "#/components/parameters/desired_salary"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Talents"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-
-    post:
-      tags: [talent]
-      summary: 人材登録
-      description: 人材登録
-      operationId: add_talent
-      x-openapi-router-controller: src.controllers.talent_controller
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TalentCreate"
-      responses:
-        201:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Talent"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-
-  /talents/{talent_id}:
-    get:
-      tags: [talent]
-      summary: 人材取得
-      description: 人材取得
-      operationId: find_talent
-      x-openapi-router-controller: src.controllers.talent_controller
-      parameters:
-        - $ref: "#/components/parameters/talent_id"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Talent"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          description: not found
-    post:
-      tags: [talent]
-      summary: 人材更新
-      description: 人材更新
-      operationId: update_talent
-      x-openapi-router-controller: src.controllers.talent_controller
-      parameters:
-        - $ref: "#/components/parameters/talent_id"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TalentUpdate"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Talent"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
 
   /talents/{talent_id}/contacts:
-    get:
-      tags: [talent]
-      summary: コンタクト一覧
-      description: コンタクト一覧
-      operationId: find_contacts
-      x-openapi-router-controller: src.controllers.talent_controller
-      parameters:
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/talent_id"
-      responses:
-        200:
-          description: 取得成功
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TalentContacts"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          description: not found
     post:
       tags: [talent]
       summary: コンタクト作成
@@ -667,63 +466,7 @@ paths:
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
-          description: not found
-
-  /talents/{talent_id}/contacts/{contact_id}:
-    get:
-      tags: [talent]
-      summary: コンタクト取得
-      description: コンタクト取得
-      operationId: find_contact
-      x-openapi-router-controller: src.controllers.talent_controller
-      parameters:
-        - $ref: "#/components/parameters/talent_id"
-        - $ref: "#/components/parameters/contact_id"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TalentContact"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          description: not found
-  /talents/{talent_id}/contacts/{contact_id}:accept:
-    post:
-      tags: [talent]
-      summary: コンタクト承認
-      description: コンタクト承認
-      operationId: accept_contact
-      x-openapi-router-controller: src.controllers.talent_controller
-      parameters:
-        - $ref: "#/components/parameters/talent_id"
-        - $ref: "#/components/parameters/contact_id"
-      responses:
-        200:
-          description: OK
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          description: not found
-  /talents/{talent_id}/contacts/{contact_id}:refuse:
-    post:
-      tags: [talent]
-      summary: コンタクト辞退
-      description: コンタクト辞退
-      operationId: refuse_contact
-      x-openapi-router-controller: src.controllers.talent_controller
-      parameters:
-        - $ref: "#/components/parameters/talent_id"
-        - $ref: "#/components/parameters/contact_id"
-      responses:
-        200:
-          description: OK
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          description: not found
+          $ref: "#/components/responses/NotFoundError"
 
 components:
   securitySchemes:
@@ -804,6 +547,8 @@ components:
   responses:
     UnauthorizedError:
       description: API KEY is missing or invalid
+    NotFoundError:
+      description: Not Found
   schemas:
     positive_integer_include_zero:
       type: integer
@@ -854,25 +599,6 @@ components:
       type: string
       pattern: '^\d{4}-\d{2}$'
       example: "2010-04"
-    AuthRequest:
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          $ref: "#/components/schemas/email"
-        password:
-          $ref: "#/components/schemas/password"
-    ChangeEmailRequest:
-      allOf:
-        - $ref: "#/components/schemas/AuthRequest"
-        - type: object
-          required:
-            - email_new
-          properties:
-            email_new:
-              $ref: "#/components/schemas/email"
     Paging:
       type: object
       properties:
@@ -993,7 +719,6 @@ components:
         - name
       properties:
         id:
-          readOnly: true
           $ref: "#/components/schemas/user_id"
         name:
           $ref: "#/components/schemas/user_name"
@@ -1307,16 +1032,6 @@ components:
               $ref: "#/components/schemas/email"
             contacts:
               $ref: "#/components/schemas/TalentContacts"
-    Talents:
-      type: object
-      properties:
-        paging:
-          $ref: "#/components/schemas/Paging"
-        talents:
-          type: array
-          default: []
-          items:
-            $ref: "#/components/schemas/Talent"
     ContactCreate:
       type: object
       required:
