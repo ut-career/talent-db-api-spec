@@ -15,6 +15,10 @@ tags:
     name: viewer
   - description: 人材
     name: talent
+  - description: 閲覧者が投稿するレビューの設問
+    name: viewerReviewQuestion
+  - description: 人材が投稿するレビューの設問
+    name: talentReviewQuestion
 security:
   - api_key: []
 paths:
@@ -177,6 +181,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Contacts"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+  /viewers/{viewer_id}/reviews:
+    post:
+      tags: [viewer]
+      summary: 閲覧者レビュー投稿
+      description: 閲覧者が人材に対してレビューを作成
+      operationId: viewer_post_reviews
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ViewerReview"
+      responses:
+        201:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewerReview"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -442,6 +472,30 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
+  /talent/reviews:
+    post:
+      tags: [talent]
+      summary: 人材レビュー投稿
+      description: 人材が閲覧者に対してレビューを作成
+      operationId: talent_post_reviews_with_firebase_id_token
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TalentReview"
+      responses:
+        201:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentReview"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
 
   /talents/{talent_id}/contacts:
     post:
@@ -467,6 +521,44 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
+  
+  /viewerReviewQuestions:
+    get:
+      tags: [viewerReviewQuestion]
+      summary: 閲覧者が投稿するレビューの設問全件取得
+      description: 閲覧者が投稿するレビューの設問全件取得
+      operationId: get_viewer_review_questions
+      x-openapi-router-controller: src.controllers.viewer_review_question_controller
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewQuestion'
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+  
+  /talentReviewQuestions:
+    get:
+      tags: [talentReviewQuestion]
+      summary: 人材が投稿するレビューの設問全件取得
+      description: 人材が投稿するレビューの設問全件取得
+      operationId: get_talent_review_questions
+      x-openapi-router-controller: src.controllers.talent_review_question_controller
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewQuestion'
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
 
 components:
   securitySchemes:
@@ -590,15 +682,22 @@ components:
       pattern: '^\d{3}-?\d{4}$'
       description: 郵便番号
       example: "1050003"
-    password:
-      type: string
-      format: password
-      writeOnly: true
-      example: "secret"
     year_month:
       type: string
       pattern: '^\d{4}-\d{2}$'
       example: "2010-04"
+    review_point:
+      type: integer
+      minimum: 1
+      maximum: 5
+    review_summary_point:
+      readOnly: true
+      type: number
+      minimum: 0
+      maximum: 5
+      nullable: true
+      description: nullは評価0件を表す
+      example: 4.2
     Paging:
       type: object
       properties:
@@ -719,13 +818,20 @@ components:
         - name
       properties:
         id:
-          $ref: "#/components/schemas/user_id"
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/user_id"
         name:
           $ref: "#/components/schemas/user_name"
-        email:
-          $ref: "#/components/schemas/email"
-        password:
-          $ref: "#/components/schemas/password"
+        review_summary_point:
+          $ref: '#/components/schemas/review_summary_point'
+    ViewerSecret:
+      allOf:
+        - $ref: '#/components/schemas/Viewer'
+        - type: object
+          properties:
+            email: 
+              $ref: "#/components/schemas/email"
     Family:
       type: object
       properties:
@@ -957,6 +1063,8 @@ components:
           description: 掲載終了日
           default: "2099-12-31"
           example: "2020-07-01"
+        review_summary_point:
+          $ref: '#/components/schemas/review_summary_point'
     TalentSecret:
       type: object
       properties:
@@ -1226,3 +1334,65 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/ViewerTalent"
+    ReviewQuestion:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/uuid'
+        title:
+          type: string
+        description:
+          type: string
+    ReviewAnswer:
+      type: object
+      properties:
+        question:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/ReviewQuestion'
+        question_id:
+          writeOnly: true
+          allOf:
+            - $ref: '#/components/schemas/uuid'
+        point:
+          $ref: '#/components/schemas/review_point'
+        comment:
+          type: string
+    ViewerReview:
+      type: object
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/uuid'
+        reviewee:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/ViewerTalent'
+        reviewee_id:
+          writeOnly: true
+          allOf:
+            - $ref: '#/components/schemas/user_id'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewAnswer'
+    TalentReview:
+      type: object
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/uuid'
+        reviewee:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/Viewer'
+        reviewee_id:
+          writeOnly: true
+          allOf:
+            - $ref: '#/components/schemas/user_id'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewAnswer'
