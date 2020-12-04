@@ -190,7 +190,7 @@ paths:
       tags: [viewer]
       summary: 閲覧者レビュー投稿
       description: 閲覧者が人材に対してレビューを作成
-      operationId: viewer_post_reviews
+      operationId: viewer_post_review
       x-openapi-router-controller: src.controllers.viewer_controller
       parameters:
         - $ref: "#/components/parameters/viewer_id"
@@ -477,7 +477,7 @@ paths:
       tags: [talent]
       summary: 人材レビュー投稿
       description: 人材が閲覧者に対してレビューを作成
-      operationId: talent_post_reviews_with_firebase_id_token
+      operationId: talent_post_review_with_firebase_id_token
       x-openapi-router-controller: src.controllers.talent_controller
       parameters:
         - $ref: "#/components/parameters/firebaseIdToken"
