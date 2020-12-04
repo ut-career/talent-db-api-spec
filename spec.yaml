@@ -597,7 +597,7 @@ components:
       in: path
       required: true
       schema:
-        $ref: "#/components/schemas/uuid"
+        $ref: "#/components/schemas/user_id"
     contact_id:
       name: contact_id
       in: path
@@ -660,10 +660,11 @@ components:
       type: string
       format: uuid
       description: uuid
-      example: "12rRjru478DDjdht8h33k"
+      example: "ca3c626a17cf429798a4f5ed10a6f1dd"
     user_id:
       type: string
       description: uid
+      maxLength: 128
       example: "5EBsIVfaq6XDXAjUjjvhTSxIvpa2"
     user_name:
       type: string
@@ -1117,7 +1118,7 @@ components:
         - type: object
           properties:
             id:
-              $ref: "#/components/schemas/uuid"
+              $ref: "#/components/schemas/user_id"
             supplier_id:
               $ref: "#/components/schemas/user_id"
             email:
@@ -1133,7 +1134,7 @@ components:
         - type: object
           properties:
             id:
-              $ref: "#/components/schemas/uuid"
+              $ref: "#/components/schemas/user_id"
             email:
               $ref: "#/components/schemas/email"
             contacts:
