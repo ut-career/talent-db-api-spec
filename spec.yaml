@@ -205,6 +205,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ViewerReview"
+        400:
+          description: bad request
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -1367,7 +1369,7 @@ components:
         reviewee:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/ViewerTalent'
+            - $ref: '#/components/schemas/Talent'
         reviewee_id:
           writeOnly: true
           allOf:
