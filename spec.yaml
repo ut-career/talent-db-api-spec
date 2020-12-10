@@ -40,6 +40,33 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
+  /viewers/{viewer_id}:findContactAcceptedTalent:
+    get:
+      tags: [viewer]
+      summary: 閲覧者コンタクト承認済み人材取得
+      description: コンタクト承認済みの人材を取得します
+      operationId: viewer_find_contact_accepted_talent
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+        - name: talent_id
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/user_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Talent"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          description: コンタクト承認済みの人材では無い場合
+        404:
+          $ref: "#/components/responses/NotFoundError"
   /viewers/{viewer_id}:searchTalents:
     get:
       tags: [viewer]
