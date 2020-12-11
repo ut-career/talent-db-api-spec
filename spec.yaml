@@ -1367,10 +1367,18 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/uuid'
-        title:
+        question:
           type: string
-        description:
+          example: hogeでしたか?
+        helper_message:
           type: string
+          example: hogeがfugaであることを基準に評価してください
+        lowest_label:
+          type: string
+          example: hogeでない
+        highest_label:
+          type: string
+          example: hogeである
     ReviewAnswer:
       type: object
       properties:
@@ -1384,8 +1392,6 @@ components:
             - $ref: '#/components/schemas/uuid'
         point:
           $ref: '#/components/schemas/review_point'
-        comment:
-          type: string
     ViewerReview:
       type: object
       properties:
@@ -1405,6 +1411,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReviewAnswer'
+        comment:
+          type: string
+          example: dummy comment
     TalentReview:
       type: object
       properties:
@@ -1424,3 +1433,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReviewAnswer'
+        comment:
+          type: string
+          example: dummy comment
