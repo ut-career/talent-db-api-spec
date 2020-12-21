@@ -17,6 +17,8 @@ tags:
     name: talent
   - description: 閲覧者が投稿するレビューの設問
     name: viewerReviewQuestion
+  - name: student
+    description: 学生
 security:
   - api_key: []
 paths:
@@ -531,6 +533,8 @@ paths:
       description: 人材が投稿するレビューの設問全件取得
       operationId: talent_get_review_questions_with_firebase_id_token
       x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
       responses:
         200:
           description: OK
@@ -584,6 +588,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReviewQuestion'
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+  
+  /student/:
+    get:
+      tags: [student]
+      summary: 学生サマリ情報取得
+      description: 学生サマリ情報取得
+      operationId: student_index
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/firebaseIdToken"
+      responses:
+        200:
+          $ref: '#/components/responses/Student'
         401:
           $ref: "#/components/responses/UnauthorizedError"
 
@@ -664,6 +683,17 @@ components:
         type: string
 
   responses:
+    Student:
+      description: 学生用に人材情報と供給者情報を両方持つ
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              talent:
+                $ref: '#/components/schemas/TalentDetail'
+              supplier:
+                $ref: '#/components/schemas/SupplierDetail'
     UnauthorizedError:
       description: API KEY is missing or invalid
     NotFoundError:
