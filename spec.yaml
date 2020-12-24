@@ -596,7 +596,7 @@ paths:
       tags: [student]
       summary: 学生サマリ情報取得
       description: 学生サマリ情報取得
-      operationId: student_index
+      operationId: student_get
       x-openapi-router-controller: src.controllers.student_controller
       parameters:
         - $ref: "#/components/parameters/firebaseIdToken"
@@ -605,6 +605,23 @@ paths:
           $ref: '#/components/responses/Student'
         401:
           $ref: "#/components/responses/UnauthorizedError"
+    post:
+      tags: [student]
+      summary: 学生登録
+      description: 供給者からの招待で学生を登録します。
+      operationId: student_post
+      x-openapi-router-controller: src.controllers.student_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentCreate"
+      responses:
+        201:
+          description: ok
+        400:
+          $ref: '#/components/responses/BadRequestError'
 
 components:
   securitySchemes:
@@ -694,6 +711,8 @@ components:
                 $ref: '#/components/schemas/TalentDetail'
               supplier:
                 $ref: '#/components/schemas/SupplierDetail'
+    BadRequestError:
+      description: Bad Request
     UnauthorizedError:
       description: API KEY is missing or invalid
     NotFoundError:
@@ -1466,3 +1485,10 @@ components:
         comment:
           type: string
           example: dummy comment
+    StudentCreate:
+      type: object
+      properties:
+        supplier_id:
+          $ref: '#/components/schemas/user_id'
+        email:
+          $ref: '#/components/schemas/email'
