@@ -622,6 +622,26 @@ paths:
           description: ok
         400:
           $ref: '#/components/responses/BadRequestError'
+  /student:signUpWithLine:
+    post:
+      tags: [student]
+      summary: LINEを使ったサインアップ
+      description: LINEログインで取得できるIdTokenを用いて学生ユーザーを作成できます。
+      operationId: student_sign_up_with_line
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentCreateWithLine"
+      responses:
+        201:
+          $ref: '#/components/responses/Student'
+        400:
+          $ref: '#/components/responses/BadRequestError'
 
 components:
   securitySchemes:
@@ -695,6 +715,11 @@ components:
         type: integer
     firebaseIdToken:
       name: x-firebase-id-token
+      in: header
+      schema:
+        type: string
+    lineIdToken:
+      name: x-line-id-token
       in: header
       schema:
         type: string
@@ -1492,3 +1517,8 @@ components:
           $ref: '#/components/schemas/user_id'
         email:
           $ref: '#/components/schemas/email'
+    StudentCreateWithLine:
+      type: object
+      properties:
+        supplier_id:
+          $ref: '#/components/schemas/user_id'
