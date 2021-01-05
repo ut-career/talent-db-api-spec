@@ -600,6 +600,7 @@ paths:
       x-openapi-router-controller: src.controllers.student_controller
       parameters:
         - $ref: "#/components/parameters/firebaseIdToken"
+        - $ref: "#/components/parameters/lineIdToken"
       responses:
         200:
           $ref: '#/components/responses/Student'
@@ -620,6 +621,25 @@ paths:
       responses:
         201:
           description: ok
+        400:
+          $ref: '#/components/responses/BadRequestError'
+    patch:
+      tags: [student]
+      summary: 学生更新
+      description: 学生を更新します。
+      operationId: student_patch
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentUpdate"
+      responses:
+        200:
+          $ref: '#/components/responses/Student'
         400:
           $ref: '#/components/responses/BadRequestError'
   /student:signUpWithLine:
@@ -1510,6 +1530,10 @@ components:
         comment:
           type: string
           example: dummy comment
+    StudentUpdate:
+      allOf:
+        - $ref: '#/components/schemas/TalentUpdate'
+        - $ref: '#/components/schemas/SupplierPatch'
     StudentCreate:
       type: object
       properties:
