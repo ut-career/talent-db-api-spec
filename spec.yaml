@@ -1222,6 +1222,7 @@ components:
             $ref: "#/components/schemas/Family"
         has_spouse:
           type: boolean
+          nullable: true
           default: null
           example: true
     TalentCreate:
