@@ -1412,6 +1412,12 @@ components:
             $ref: "#/components/schemas/TalentContact"
         number_of_unread_contacts:
           $ref: "#/components/schemas/positive_integer_include_zero"
+        number_of_read_contacts:
+          $ref: "#/components/schemas/positive_integer_include_zero"
+        number_of_accepted_contacts:
+          $ref: "#/components/schemas/positive_integer_include_zero"
+        point:
+          $ref: "#/components/schemas/positive_integer_include_zero"
     ContactTemplateBase:
       type: object
       required:
@@ -1467,6 +1473,8 @@ components:
         number_of_contacts:
           $ref: "#/components/schemas/positive_integer_include_zero"
         number_of_accepted_contacts:
+          $ref: "#/components/schemas/positive_integer_include_zero"
+        point:
           $ref: "#/components/schemas/positive_integer_include_zero"
     ViewerTalent:
       allOf:
