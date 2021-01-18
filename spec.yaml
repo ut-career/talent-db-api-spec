@@ -752,12 +752,7 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              talent:
-                $ref: '#/components/schemas/TalentDetail'
-              supplier:
-                $ref: '#/components/schemas/SupplierDetail'
+            $ref: "#/components/schemas/Student"
     BadRequestError:
       description: Bad Request
       content:
@@ -1416,8 +1411,6 @@ components:
           $ref: "#/components/schemas/positive_integer_include_zero"
         number_of_accepted_contacts:
           $ref: "#/components/schemas/positive_integer_include_zero"
-        point:
-          $ref: "#/components/schemas/positive_integer_include_zero"
     ContactTemplateBase:
       type: object
       required:
@@ -1473,8 +1466,6 @@ components:
         number_of_contacts:
           $ref: "#/components/schemas/positive_integer_include_zero"
         number_of_accepted_contacts:
-          $ref: "#/components/schemas/positive_integer_include_zero"
-        point:
           $ref: "#/components/schemas/positive_integer_include_zero"
     ViewerTalent:
       allOf:
@@ -1583,3 +1574,37 @@ components:
       properties:
         supplier_id:
           $ref: '#/components/schemas/user_id'
+    BonusLog:
+      type: object
+      properties:
+        value:
+          $ref: "#/components/schemas/positive_integer_include_zero"
+        bonus_type:
+          type: string
+          enum:
+            - PAY_OUT
+            - USER_ACCEPTS_CONTACT
+            - CHILD_ACCEPTS_CONTACT
+            - GRANDCHILD_ACCEPTS_CONTACT
+          example: USER_ACCEPTS_CONTACT
+        created_at:
+          type: string
+          format: datetime
+    Bonus:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/user_id"
+        logs:
+          type: array
+          items:
+            $ref: "#/components/schemas/BonusLog"
+    Student:
+      type: object
+      properties:
+        talent:
+          $ref: '#/components/schemas/TalentDetail'
+        supplier:
+          $ref: '#/components/schemas/SupplierDetail'
+        bonus:
+          $ref: "#/components/schemas/Bonus"
