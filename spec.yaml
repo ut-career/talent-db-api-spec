@@ -664,6 +664,26 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         401:
           $ref: '#/components/responses/UnauthorizedError'
+  /student/children:
+    get:
+      tags: [student]
+      summary: 学生招待者情報取得
+      description: 学生招待者情報取得
+      operationId: student_children_get
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/lineIdToken"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierChildren"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
 
 components:
   securitySchemes:
