@@ -681,7 +681,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupplierChildren"
+                $ref: "#/components/schemas/SupplierTalents"
         401:
           $ref: "#/components/responses/UnauthorizedError"
 
