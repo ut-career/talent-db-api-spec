@@ -606,6 +606,8 @@ paths:
           $ref: '#/components/responses/Student'
         401:
           $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
     post:
       tags: [student]
       summary: 学生登録
@@ -623,6 +625,8 @@ paths:
           description: ok
         400:
           $ref: '#/components/responses/BadRequestError'
+        403:
+          $ref: '#/components/responses/ForbiddenError'
     patch:
       tags: [student]
       summary: 学生更新
@@ -642,6 +646,8 @@ paths:
           $ref: '#/components/responses/Student'
         400:
           $ref: '#/components/responses/BadRequestError'
+        403:
+          $ref: '#/components/responses/ForbiddenError'
   /student:signUpWithLine:
     post:
       tags: [student]
@@ -664,6 +670,8 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         401:
           $ref: '#/components/responses/UnauthorizedError'
+        403:
+          $ref: '#/components/responses/ForbiddenError'
   /student/children:
     get:
       tags: [student]
@@ -684,6 +692,8 @@ paths:
                 $ref: "#/components/schemas/SupplierTalents"
         401:
           $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
 
 components:
   securitySchemes:
@@ -781,6 +791,12 @@ components:
             $ref: "#/components/schemas/ErrorResponse"
     UnauthorizedError:
       description: API KEY is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    ForbiddenError:
+      description: Forbidden
       content:
         application/json:
           schema:
