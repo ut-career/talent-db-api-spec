@@ -672,6 +672,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         403:
           $ref: '#/components/responses/ForbiddenError'
+        409:
+          description: Conflict
   /student/children:
     get:
       tags: [student]
