@@ -718,6 +718,67 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         403:
           $ref: '#/components/responses/ForbiddenError'
+  /student/contacts/{contact_id}:
+    get:
+      tags: [student]
+      summary: 学生コンタクト取得
+      description: 学生コンタクト取得
+      operationId: student_contact_get
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/contact_id"
+        - $ref: "#/components/parameters/lineIdToken"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentContact"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: "#/components/responses/NotFoundError"
+  /student/contacts/{contact_id}:accept:
+    post:
+      tags: [student]
+      summary: 学生コンタクト承認
+      description: 学生コンタクト承認
+      operationId: student_contact_accept
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: "#/components/responses/NotFoundError"
+  /student/contacts/{contact_id}:refuse:
+    post:
+      tags: [student]
+      summary: 学生コンタクト辞退
+      description: 学生コンタクト辞退
+      operationId: student_contact_refuse
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: OK
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: "#/components/responses/NotFoundError"
 
 components:
   securitySchemes:
