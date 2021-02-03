@@ -1197,6 +1197,11 @@ components:
             長所はこれこれ
             短所はこれこれ
             ・
+        want_long_term_internship:
+          type: boolean
+          description: 長期インターンを希望するか
+          nullable: true
+          example: true
     Resume:
       type: object
       required:
