@@ -660,7 +660,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          text/plain:
             schema:
               $ref: '#/components/schemas/email'
       responses:
