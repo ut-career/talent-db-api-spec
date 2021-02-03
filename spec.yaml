@@ -648,6 +648,32 @@ paths:
           $ref: '#/components/responses/BadRequestError'
         403:
           $ref: '#/components/responses/ForbiddenError'
+  /student/email:
+    patch:
+      tags: [student]
+      summary: 学生メールアドレス更新
+      description: 学生メールアドレス更新
+      operationId: student_email_patch
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/email'
+      responses:
+        200:
+          $ref: '#/components/responses/Student'
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        409:
+          description: Conflict
   /student:signUpWithLine:
     post:
       tags: [student]
