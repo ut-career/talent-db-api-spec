@@ -240,6 +240,30 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
+  /suppliers:
+    post:
+      tags: [supplier]
+      summary: 供給者登録
+      description: 供給者を登録します。
+      operationId: supplier_post
+      x-openapi-router-controller: src.controllers.supplier_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SupplierBase"
+      responses:
+        201:
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupplierDetail"
+        400:
+          $ref: "#/components/responses/BadRequestError"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
   /suppliers/{supplier_id}:
     get:
       tags: [supplier]
@@ -1025,6 +1049,9 @@ components:
         address:
           type: string
           example: 東京都港区新橋1234〇〇ビル5階
+        special_student:
+          type: boolean
+          example: false
     Supplier:
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
