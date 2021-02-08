@@ -409,6 +409,28 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
+  /supplierSpecialStudentInvites/{supplier_ss_invite_id}:
+    get:
+      tags: [supplier]
+      summary: 特別学生招待コード検証
+      description: 特別学生招待コード検証
+      operationId: supplier_ss_invite_check_by_id
+      x-openapi-router-controller: src.controllers.supplier_controller
+      parameters:
+        - name: supplier_ss_invite_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        200:
+          description: invite_idが使用可能
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+        410:
+          description: invite_idが使用済み
   /talent/:
     get:
       tags: [talent]
