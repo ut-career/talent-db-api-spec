@@ -409,6 +409,32 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
+
+  /suppliers/{supplier_id}/specialStudent:
+    post:
+      tags: [supplier]
+      summary: 特別学生招待コード登録
+      description: 特別学生招待コード登録
+      operationId: supplier_special_student_post
+      x-openapi-router-controller: src.controllers.supplier_controller
+      parameters:
+        - $ref: "#/components/parameters/supplier_id"
+        - name: ss
+          in: query
+          required: true
+          description: 招待コード（invite_id）
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        200:
+          description: ok
+        400:
+          description: invite_idが使用済み
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+      
   /supplierSpecialStudentInvites/{supplier_ss_invite_id}:
     get:
       tags: [supplier]
@@ -1071,9 +1097,6 @@ components:
         address:
           type: string
           example: 東京都港区新橋1234〇〇ビル5階
-        special_student:
-          type: boolean
-          example: false
     Supplier:
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
