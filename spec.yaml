@@ -252,14 +252,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SupplierBase"
+              $ref: "#/components/schemas/SupplierCreate"
       responses:
         201:
           description: 登録成功
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SupplierDetail"
+                $ref: "#/components/schemas/Supplier"
         400:
           $ref: "#/components/responses/BadRequestError"
         401:
@@ -1086,6 +1086,18 @@ components:
               $ref: "#/components/schemas/SupplierChildren"
             talents:
               $ref: "#/components/schemas/SupplierTalents"
+    SupplierCreate:
+      allOf:
+        - $ref: "#/components/schemas/SupplierBase"
+        - type: object
+          required:
+            - name
+            - email
+          properties:
+            parent_id:
+              $ref: "#/components/schemas/user_id"
+            email:
+              $ref: "#/components/schemas/email"
     SupplierPatch:
       $ref: "#/components/schemas/SupplierBase"
     SupplierChildBase:
