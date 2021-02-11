@@ -273,6 +273,7 @@ paths:
       x-openapi-router-controller: src.controllers.supplier_controller
       parameters:
         - $ref: "#/components/parameters/supplier_id"
+        - $ref: "#/components/parameters/target_ym"
       responses:
         200:
           description: 取得成功
@@ -373,6 +374,7 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/supplier_id"
+        - $ref: "#/components/parameters/target_ym"
       responses:
         200:
           description: 取得成功
@@ -924,6 +926,18 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/uuid"
+    bonus_id:
+      name: bonus_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/user_id"
+    target_ym:
+      name: target_ym
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/year_month"
     desired_industry:
       name: desired_industry
       in: query
@@ -1125,12 +1139,8 @@ components:
               $ref: "#/components/schemas/user_id"
             email:
               $ref: "#/components/schemas/email"
-            parent:
-              $ref: "#/components/schemas/Supplier"
             children:
               $ref: "#/components/schemas/SupplierChildren"
-            talents:
-              $ref: "#/components/schemas/SupplierTalents"
     SupplierCreate:
       allOf:
         - $ref: "#/components/schemas/SupplierBase"
@@ -1156,22 +1166,13 @@ components:
         email:
           $ref: "#/components/schemas/email"
     SupplierChild:
-      allOf:
-        - $ref: "#/components/schemas/SupplierChildBase"
-        - type: object
-          properties:
-            id:
-              $ref: "#/components/schemas/user_id"
-            number_of_talents:
-              $ref: "#/components/schemas/positive_integer_include_zero"
-            number_of_accepted_contacts:
-              $ref: "#/components/schemas/positive_integer_include_zero"
-            number_of_children:
-              $ref: "#/components/schemas/positive_integer_include_zero"
-            number_of_children_talents:
-              $ref: "#/components/schemas/positive_integer_include_zero"
-            number_of_children_accepted_contacts:
-              $ref: "#/components/schemas/positive_integer_include_zero"
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/user_id"
+        current_ym_point:
+          type: integer
+          example: 5000
     SupplierChildCreate:
       allOf:
         - $ref: "#/components/schemas/SupplierChildBase"
@@ -1189,16 +1190,9 @@ components:
           default: []
           items:
             $ref: "#/components/schemas/SupplierChild"
-        number_of_talents:
-          $ref: "#/components/schemas/positive_integer_include_zero"
-        number_of_accepted_contacts:
-          $ref: "#/components/schemas/positive_integer_include_zero"
-        number_of_grandchildren:
-          $ref: "#/components/schemas/positive_integer_include_zero"
-        number_of_grandchildren_talents:
-          $ref: "#/components/schemas/positive_integer_include_zero"
-        number_of_grandchildren_accepted_contacts:
-          $ref: "#/components/schemas/positive_integer_include_zero"
+        current_ym_point:
+          type: integer
+          example: 100000
     Viewer:
       type: object
       required:
@@ -1830,7 +1824,8 @@ components:
       type: object
       properties:
         value:
-          $ref: "#/components/schemas/positive_integer_include_zero"
+          type: integer
+          example: 1000
         bonus_type:
           type: string
           enum:
