@@ -841,7 +841,7 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         404:
           $ref: "#/components/responses/NotFoundError"
-  /student/contacts/{contact_id}:accept:
+  /student/contacts/{contact_id}/accept:
     post:
       tags: [student]
       summary: 学生コンタクト承認
@@ -860,7 +860,7 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         404:
           $ref: "#/components/responses/NotFoundError"
-  /student/contacts/{contact_id}:refuse:
+  /student/contacts/{contact_id}/refuse:
     post:
       tags: [student]
       summary: 学生コンタクト辞退
