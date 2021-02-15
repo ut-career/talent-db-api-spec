@@ -1104,6 +1104,9 @@ components:
         name_kana:
           type: string
           example: しめい
+        company_name:
+          type: string
+          example: 株式会社kokoroe
         phone_number:
           $ref: "#/components/schemas/phone_number"
         zip_code:
