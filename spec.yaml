@@ -93,14 +93,34 @@ paths:
               - master
               - doctor
             example: master
-        - name: age_max
-          description: 今年度末（2020年なら2021/3/31）時点での年齢として判断します。
+        - name: age_min
+          description: 選択した数値を含みます。
           in: query
           schema:
             type: integer
             minimum: 0
             maximum: 100
             example: 21
+        - name: age_max
+          description: 選択した数値を含みます。
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            example: 21
+        - name: sex
+          in: query
+          schema:
+            $ref: '#/components/schemas/sex'
+        - name: looking
+          in: query
+          schema:
+            type: string
+            enum:
+              - JOB
+              - INTERNSHIP
+            default: JOB
         - name: search
           description: 全文検索
           in: query
