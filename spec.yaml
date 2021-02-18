@@ -727,9 +727,14 @@ paths:
       requestBody:
         required: true
         content:
-          text/plain:
+          application/json:
             schema:
-              $ref: '#/components/schemas/email'
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  $ref: '#/components/schemas/email'
       responses:
         200:
           $ref: '#/components/responses/Student'
