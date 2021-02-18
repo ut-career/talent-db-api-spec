@@ -356,33 +356,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
-    post:
-      tags: [supplier]
-      summary: 人材登録
-      description: 人材登録
-      operationId: supplier_create_talent
-      x-openapi-router-controller: src.controllers.supplier_controller
-      parameters:
-        - $ref: "#/components/parameters/supplier_id"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/TalentCreate"
-      responses:
-        201:
-          description: 登録成功
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Talent"
-        400:
-          description: bad request
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          $ref: "#/components/responses/NotFoundError"
   /suppliers/{supplier_id}/children:
     get:
       tags: [supplier]
@@ -1229,13 +1202,6 @@ components:
           $ref: "#/components/schemas/user_name"
         review_summary_point:
           $ref: '#/components/schemas/review_summary_point'
-    ViewerSecret:
-      allOf:
-        - $ref: '#/components/schemas/Viewer'
-        - type: object
-          properties:
-            email: 
-              $ref: "#/components/schemas/email"
     Family:
       type: object
       properties:
@@ -1324,11 +1290,6 @@ components:
             長所はこれこれ
             短所はこれこれ
             ・
-        want_long_term_internship:
-          type: boolean
-          description: 長期インターンを希望するか
-          nullable: true
-          example: true
     Resume:
       type: object
       required:
@@ -1461,6 +1422,16 @@ components:
           type: integer
           description: 希望年収
           example: 6000000
+        looking_for_job:
+          type: boolean
+          description: 求人情報の紹介を希望するか
+          nullable: true
+          example: true
+        looking_for_internship:
+          type: boolean
+          description: インターンシップの紹介を希望するか
+          nullable: true
+          example: true
         publish_begin_date:
           type: string
           format: date
@@ -1512,16 +1483,6 @@ components:
           nullable: true
           default: null
           example: true
-    TalentCreate:
-      allOf:
-        - $ref: "#/components/schemas/TalentBase"
-        - $ref: "#/components/schemas/TalentSecret"
-        - type: object
-          required:
-            - email
-          properties:
-            email:
-              $ref: "#/components/schemas/email"
     Talent:
       allOf:
         - $ref: "#/components/schemas/TalentBase"
