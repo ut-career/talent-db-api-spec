@@ -19,6 +19,8 @@ tags:
     name: viewerReviewQuestion
   - name: student
     description: 学生
+  - name: contact
+    description: コンタクト
 security:
   - api_key: []
 paths:
@@ -227,7 +229,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Contacts"
+                $ref: "#/components/schemas/ViewerContacts"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -805,6 +807,10 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/lineIdToken"
+        - name: from
+          in: query
+          schema:
+            $ref: "#/components/schemas/ContactSender"
       responses:
         200:
           description: 取得成功
@@ -871,6 +877,116 @@ paths:
       responses:
         200:
           description: OK
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: "#/components/responses/NotFoundError"
+  /student/viewers:
+    get:
+      tags: [student]
+      summary: 学生閲覧者リスト取得
+      description: 学生閲覧者リスト取得
+      operationId: student_viewers_get
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/limit"
+        - name: order_by
+          in: query
+          schema:
+            type: string
+            enum:
+              - review_point
+            example: review_point
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentViewers"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+  /student/viewers/{viewer_id}:
+    get:
+      tags: [student]
+      summary: 学生閲覧者取得
+      description: 学生閲覧者取得
+      operationId: student_viewer_get
+      x-openapi-router-controller: src.controllers.student_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+        - $ref: "#/components/parameters/viewer_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentViewer"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: '#/components/responses/ForbiddenError'
+        404:
+          $ref: "#/components/responses/NotFoundError"
+
+  /contacts:
+    post:
+      tags: [contact]
+      summary: コンタクト作成
+      description: コンタクト作成
+      operationId: contact_post
+      x-openapi-router-controller: src.controllers.contact_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactCreate"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactBase"
+        400:
+          description: bad request
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        403:
+          $ref: "#/components/responses/ForbiddenError"
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactBase"
+  /contacts/{contact_id}:
+    get:
+      tags: [contact]
+      summary: コンタクト取得
+      description: コンタクト取得
+      operationId: contact_get
+      x-openapi-router-controller: src.controllers.contact_controller
+      parameters:
+        - $ref: "#/components/parameters/contact_id"
+        - $ref: "#/components/parameters/lineIdToken"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         403:
@@ -1021,8 +1137,8 @@ components:
       maximum: 200
     uuid:
       type: string
-      format: uuid
       description: uuid
+      pattern: '[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}'
       example: "ca3c626a17cf429798a4f5ed10a6f1dd"
     user_id:
       type: string
@@ -1038,6 +1154,7 @@ components:
       example: "hoge@hoge.com"
     phone_number:
       type: string
+      pattern: '^\d{1,11}$'
       example: "08004859483"
     zip_code:
       type: string
@@ -1205,8 +1322,46 @@ components:
             - $ref: "#/components/schemas/user_id"
         name:
           $ref: "#/components/schemas/user_name"
+        work_locations:
+          title: 紹介可能な地域
+          type: array
+          items:
+            type: string
+          example: [東京都, 神奈川県]
+        jobs:
+          title: 得意職種
+          type: array
+          items:
+            type: string
+          example: [営業, SE]
+        company_types:
+          title: 得意企業規模
+          type: array
+          items:
+            type: string
+          example: [大企業, ベンチャー企業, 老舗]
+        results:
+          title: 紹介実績
+          type: string
+          example: 10~30人
         review_summary_point:
           $ref: '#/components/schemas/review_summary_point'
+    TalentViewer:
+      allOf:
+        - $ref: "#/components/schemas/Viewer"
+        - type: object
+          properties:
+            contact:
+              $ref: "#/components/schemas/ContactBase"
+    TalentViewers:
+      type: object
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        viewers:
+          type: array
+          items:
+            $ref: "#/components/schemas/TalentViewer"
     Family:
       type: object
       properties:
@@ -1516,15 +1671,56 @@ components:
               $ref: "#/components/schemas/email"
             contacts:
               $ref: "#/components/schemas/TalentContacts"
+    ContactSender:
+      type: string
+      enum:
+        - VIEWER
+        - TALENT
+      example: VIEWER
+    ContactMessage:
+      type: object
+      required:
+        - sender
+        - title
+        - message
+        - created_at
+      properties:
+        sender:
+          $ref: "#/components/schemas/ContactSender"
+        title:
+          type: string
+          maxLength: 50
+          example: コンタクト件名例
+        message:
+          type: string
+          example: コンタクトメッセージ内容例
+        created_at:
+          type: string
+          format: date-time
+          example: "2020-09-10T09:12:28Z"
+    ContactStatus:
+      type: string
+      enum:
+        - UNREAD
+        - READ
+        - ACCEPTED
+        - REFUSED
+      example: UNREAD
     ContactCreate:
       type: object
       required:
         - viewer_id
+        - telent_id
+        - sender
         - title
         - message
       properties:
         viewer_id:
           $ref: "#/components/schemas/user_id"
+        telent_id:
+          $ref: "#/components/schemas/user_id"
+        sender:
+          $ref: "#/components/schemas/ContactSender"
         title:
           type: string
           maxLength: 50
@@ -1536,6 +1732,7 @@ components:
       type: object
       required:
         - id
+        - first_sender
         - title
         - message
         - status
@@ -1544,6 +1741,8 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/uuid"
+        first_sender:
+          $ref: "#/components/schemas/ContactSender"
         title:
           type: string
           maxLength: 50
@@ -1551,14 +1750,12 @@ components:
         message:
           type: string
           example: コンタクトメッセージ内容例
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactMessage"
         status:
-          type: string
-          enum:
-            - UNREAD
-            - READ
-            - ACCEPTED
-            - REFUSED
-          example: UNREAD
+          $ref: "#/components/schemas/ContactStatus"
         send_datetime:
           type: string
           format: date-time
@@ -1568,47 +1765,30 @@ components:
           type: integer
           example: 1
     Contact:
-      type: object
-      required:
-        - id
-        - talent
-        - viewer_id
-        - title
-        - message
-        - status
-        - send_datetime
-        - send_count
-      properties:
-        id:
-          $ref: "#/components/schemas/uuid"
-        talent:
-          $ref: "#/components/schemas/Talent"
-        viewer_id:
-          $ref: "#/components/schemas/user_id"
-        title:
-          type: string
-          maxLength: 50
-          example: コンタクト件名例
-        message:
-          type: string
-          example: コンタクトメッセージ内容例
-        status:
-          type: string
-          enum:
-            - UNREAD
-            - READ
-            - ACCEPTED
-            - REFUSED
-          example: UNREAD
-        send_datetime:
-          type: string
-          format: date-time
-          example: "2020-09-10T09:12:28Z"
-        send_count:
-          description: コンタクト回数
-          type: integer
-          example: 1
-    Contacts:
+      allOf:
+        - $ref: "#/components/schemas/ContactBase"
+        - type: object
+          required:
+            - talent_id
+            - viewer_id
+          properties:
+            talent_id:
+              $ref: "#/components/schemas/user_id"
+            viewer_id:
+              $ref: "#/components/schemas/user_id"
+    ViewerContact:
+      allOf:
+        - $ref: "#/components/schemas/ContactBase"
+        - type: object
+          required:
+            - talent
+            - viewer_id
+          properties:
+            talent:
+              $ref: "#/components/schemas/Talent"
+            viewer_id:
+              $ref: "#/components/schemas/user_id"
+    ViewerContacts:
       type: object
       properties:
         paging:
@@ -1617,7 +1797,7 @@ components:
           type: array
           default: []
           items:
-            $ref: "#/components/schemas/Contact"
+            $ref: "#/components/schemas/ViewerContact"
     TalentContact:
       allOf:
         - $ref: "#/components/schemas/ContactBase"
@@ -1825,7 +2005,7 @@ components:
           example: USER_ACCEPTS_CONTACT
         created_at:
           type: string
-          format: datetime
+          format: date-time
     Bonus:
       type: object
       properties:
