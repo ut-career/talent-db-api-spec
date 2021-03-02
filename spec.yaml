@@ -825,7 +825,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Contact"
+                $ref: "#/components/schemas/ContactBase"
         400:
           $ref: "#/components/responses/Error"
         401:
@@ -855,7 +855,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Contact"
+                $ref: "#/components/schemas/ContactBase"
         400:
           $ref: "#/components/responses/Error"
         401:
@@ -1614,6 +1614,8 @@ components:
       type: object
       required:
         - id
+        - viewer_id
+        - talent_id
         - first_sender
         - title
         - message
@@ -1623,6 +1625,10 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/uuid"
+        viewer_id:
+          $ref: "#/components/schemas/user_id"
+        talent_id:
+          $ref: "#/components/schemas/user_id"
         first_sender:
           $ref: "#/components/schemas/ContactSender"
         title:
@@ -1646,30 +1652,15 @@ components:
           description: コンタクト回数
           type: integer
           example: 1
-    Contact:
-      allOf:
-        - $ref: "#/components/schemas/ContactBase"
-        - type: object
-          required:
-            - talent_id
-            - viewer_id
-          properties:
-            talent_id:
-              $ref: "#/components/schemas/user_id"
-            viewer_id:
-              $ref: "#/components/schemas/user_id"
     ViewerContact:
       allOf:
         - $ref: "#/components/schemas/ContactBase"
         - type: object
           required:
             - talent
-            - viewer_id
           properties:
             talent:
               $ref: "#/components/schemas/Talent"
-            viewer_id:
-              $ref: "#/components/schemas/user_id"
     ViewerContacts:
       type: object
       properties:
