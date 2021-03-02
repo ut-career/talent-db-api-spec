@@ -39,7 +39,34 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Viewer"
+                $ref: "#/components/schemas/ViewerBase"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+    patch:
+      tags: [viewer]
+      summary: 閲覧者情報更新
+      description: 閲覧者情報更新
+      operationId: viewer_patch
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ViewerBase"
+      responses:
+        200:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewerBase"
+        400:
+          description: bad request
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -1193,6 +1220,44 @@ components:
         current_ym_point:
           type: integer
           example: 100000
+    ViewerBase:
+      type: object
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: "#/components/schemas/user_id"
+        company_name:
+          type: string
+          example: 株式会社kokoroe
+        staff_name:
+          allOf:
+            - $ref: "#/components/schemas/user_name"
+          description: 担当者名
+        work_locations:
+          title: 紹介可能な地域
+          type: array
+          items:
+            type: string
+          example: [東京都, 神奈川県]
+        jobs:
+          title: 得意職種
+          type: array
+          items:
+            type: string
+          example: [法人営業, 経営幹部、経営企画、事業企画]
+        company_types:
+          title: 得意企業規模
+          type: array
+          items:
+            type: string
+          example: [大企業, ベンチャー企業, 老舗]
+        results:
+          title: 紹介実績
+          type: string
+          example: 50~100人
+        review_summary_point:
+          $ref: '#/components/schemas/review_summary_point'
     Viewer:
       type: object
       required:
