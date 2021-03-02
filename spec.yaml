@@ -44,7 +44,7 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
-  /viewers/{viewer_id}:findContactAcceptedTalent:
+  /viewers/{viewer_id}/method:findContactAcceptedTalent:
     get:
       tags: [viewer]
       summary: 閲覧者コンタクト承認済み人材取得
@@ -71,7 +71,7 @@ paths:
           description: コンタクト承認済みの人材では無い場合
         404:
           $ref: "#/components/responses/NotFoundError"
-  /viewers/{viewer_id}:searchTalents:
+  /viewers/{viewer_id}/method:searchTalents:
     get:
       tags: [viewer]
       summary: 閲覧者人材検索
@@ -223,6 +223,10 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/limit"
         - $ref: "#/components/parameters/viewer_id"
+        - name: sender
+          in: query
+          schema:
+            $ref: "#/components/schemas/ContactSender"
       responses:
         200:
           description: 取得成功
@@ -230,6 +234,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ViewerContacts"
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
+        404:
+          $ref: "#/components/responses/NotFoundError"
+  /viewers/{viewer_id}/contacts/{contact_id}:
+    get:
+      tags: [viewer]
+      summary: 閲覧者コンタクト取得
+      description: 閲覧者コンタクト取得
+      operationId: viewer_get_contact
+      x-openapi-router-controller: src.controllers.viewer_controller
+      parameters:
+        - $ref: "#/components/parameters/viewer_id"
+        - $ref: "#/components/parameters/contact_id"
+      responses:
+        200:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewerContact"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         404:
@@ -801,12 +826,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Contact"
+        400:
+          $ref: "#/components/responses/Error"
         401:
           $ref: "#/components/responses/UnauthorizedError"
         403:
           $ref: '#/components/responses/ForbiddenError'
         404:
           $ref: "#/components/responses/NotFoundError"
+  /contacts:updateStatus:
+    post:
+      tags: [contact]
+      summary: コンタクトステータス更新
+      description: コンタクトステータス更新
+      operationId: contact_status_post
+      x-openapi-router-controller: src.controllers.contact_controller
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactStatusPostRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        400:
+          $ref: "#/components/responses/Error"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        409:
+          $ref: "#/components/responses/Error"
 
 components:
   securitySchemes:
@@ -908,6 +967,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Student"
+    Error:
+      description: error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
     BadRequestError:
       description: Bad Request
       content:
@@ -1016,6 +1081,9 @@ components:
         status:
           type: integer
           example: 401
+        content:
+          type: object
+          additionalProperties: true
     Paging:
       type: object
       properties:
@@ -1838,3 +1906,21 @@ components:
           $ref: '#/components/schemas/SupplierDetail'
         bonus:
           $ref: "#/components/schemas/Bonus"
+    ContactStatusPostRequest:
+      type: object
+      required:
+        - talent_id
+        - viewer_id
+        - operator
+        - status
+      properties:
+        contact_id:
+          $ref: "#/components/schemas/uuid"
+        talent_id:
+          $ref: "#/components/schemas/user_id"
+        viewer_id:
+          $ref: "#/components/schemas/user_id"
+        operator:
+          $ref: "#/components/schemas/ContactSender"
+        status:
+          $ref: "#/components/schemas/ContactStatus"
