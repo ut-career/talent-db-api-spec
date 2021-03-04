@@ -290,11 +290,12 @@ paths:
     post:
       tags: [viewer]
       summary: 閲覧者レビュー投稿
-      description: 閲覧者が人材に対してレビューを作成
+      description: 閲覧者に対してレビューを作成
       operationId: viewer_post_review
       x-openapi-router-controller: src.controllers.viewer_controller
       parameters:
         - $ref: "#/components/parameters/viewer_id"
+        - $ref: "#/components/parameters/lineIdToken"
       requestBody:
         required: true
         content:
@@ -309,11 +310,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ViewerReview"
         400:
-          description: bad request
+          $ref: "#/components/responses/Error"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /suppliers:
     post:
       tags: [supplier]
@@ -510,8 +513,8 @@ paths:
   /viewerReviewQuestions:
     get:
       tags: [viewerReviewQuestion]
-      summary: 閲覧者が投稿するレビューの設問全件取得
-      description: 閲覧者が投稿するレビューの設問全件取得
+      summary: 閲覧者へのレビューの設問全件取得
+      description: 閲覧者へのレビューの設問全件取得
       operationId: get_viewer_review_questions
       x-openapi-router-controller: src.controllers.viewer_review_question_controller
       responses:
@@ -525,6 +528,37 @@ paths:
                   $ref: '#/components/schemas/ReviewQuestion'
         401:
           $ref: "#/components/responses/UnauthorizedError"
+
+  /talents/{talent_id}/reviews:
+    post:
+      tags: [talents]
+      summary: 人材へのレビュー投稿
+      description: 人材に対してレビューを作成
+      operationId: talent_post_review
+      x-openapi-router-controller: src.controllers.talent_controller
+      parameters:
+        - $ref: "#/components/parameters/talent_id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TalentReview"
+      responses:
+        201:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TalentReview"
+        400:
+          $ref: "#/components/responses/Error"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
   
   /student/:
     get:
@@ -1717,6 +1751,12 @@ components:
           description: コンタクト回数
           type: integer
           example: 1
+        talent_reviewed:
+          description: 人材が評価をしたか。
+          type: boolean
+        viewer_reviewed:
+          description: 閲覧者が評価をしたか。
+          type: boolean
     ViewerContact:
       allOf:
         - $ref: "#/components/schemas/ContactBase"
@@ -1874,11 +1914,11 @@ components:
           readOnly: true
           allOf:
             - $ref: '#/components/schemas/uuid'
-        reviewee:
+        reviewer:
           readOnly: true
           allOf:
             - $ref: '#/components/schemas/Talent'
-        reviewee_id:
+        reviewer_id:
           writeOnly: true
           allOf:
             - $ref: '#/components/schemas/user_id'
@@ -1896,11 +1936,11 @@ components:
           readOnly: true
           allOf:
             - $ref: '#/components/schemas/uuid'
-        reviewee:
+        reviewer:
           readOnly: true
           allOf:
             - $ref: '#/components/schemas/Viewer'
-        reviewee_id:
+        reviewer_id:
           writeOnly: true
           allOf:
             - $ref: '#/components/schemas/user_id'
