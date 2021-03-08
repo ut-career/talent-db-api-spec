@@ -15,8 +15,10 @@ tags:
     name: viewer
   - description: 人材
     name: talent
-  - description: 閲覧者が投稿するレビューの設問
+  - description: 閲覧者へのレビューの設問
     name: viewerReviewQuestion
+  - description: 人材へのレビューの設問
+    name: talentReviewQuestion
   - name: student
     description: 学生
   - name: contact
@@ -531,10 +533,10 @@ paths:
 
   /talents/{talent_id}/reviews:
     post:
-      tags: [talents]
+      tags: [talent]
       summary: 人材へのレビュー投稿
       description: 人材に対してレビューを作成
-      operationId: talent_post_review
+      operationId: talent_review_post
       x-openapi-router-controller: src.controllers.talent_controller
       parameters:
         - $ref: "#/components/parameters/talent_id"
@@ -559,6 +561,25 @@ paths:
           $ref: "#/components/responses/Error"
         404:
           $ref: "#/components/responses/Error"
+  
+  /talentReviewQuestions:
+    get:
+      tags: [talentReviewQuestions]
+      summary: 人材へのレビューの設問全件取得
+      description: 人材へのレビューの設問全件取得
+      operationId: talent_review_questions_get
+      x-openapi-router-controller: src.controllers.talent_review_question_controller
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewQuestion'
+        401:
+          $ref: "#/components/responses/UnauthorizedError"
   
   /student/:
     get:
