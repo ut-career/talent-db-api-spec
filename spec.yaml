@@ -1111,7 +1111,7 @@ components:
     user_name:
       type: string
       example: "dummy name"
-      x-faker: faker.name
+      x-faker: name.findName
     email:
       type: string
       format: email
@@ -1396,7 +1396,7 @@ components:
         name:
           type: string
           example: "UT大学"
-          x-faker: random.word
+          x-faker: address.state
         enrollment_year_month:
           $ref: "#/components/schemas/year_month"
         graduation_year_month:
@@ -1530,10 +1530,12 @@ components:
           type: string
           description: 都道府県名
           example: 東京都
+          x-faker: address.county
         city:
           type: string
           description: 市区町村
           example: 港区
+          x-faker: address.city
         city_kana:
           type: string
           description: 市区町村ふりがな
