@@ -23,6 +23,8 @@ tags:
     description: 学生
   - name: contact
     description: コンタクト
+  - name: bonus
+    description: ボーナス
 security:
   - api_key: []
 paths:
@@ -948,6 +950,32 @@ paths:
           $ref: "#/components/responses/Error"
         409:
           $ref: "#/components/responses/Error"
+  
+  /bonuses/{bonus_id}:
+    get:
+      tags: [bonus]
+      summary: ボーナス取得
+      description: ボーナス取得
+      operationId: bonus_get
+      x-openapi-router-controller: src.controllers.bonus_controller
+      parameters:
+        - $ref: "#/components/parameters/bonus_id"
+        - $ref: "#/components/parameters/lineIdToken"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bonus"
+        400:
+          $ref: "#/components/responses/Error"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
 
 components:
   securitySchemes:
@@ -1272,7 +1300,6 @@ components:
           $ref: "#/components/schemas/Paging"
         children:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/SupplierChild"
         current_ym_point:
@@ -1800,7 +1827,6 @@ components:
           $ref: "#/components/schemas/Paging"
         contacts:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/ViewerContact"
     TalentContact:
@@ -1817,7 +1843,6 @@ components:
           $ref: "#/components/schemas/Paging"
         contacts:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/TalentContact"
         number_of_unread_contacts:
@@ -1853,7 +1878,6 @@ components:
               $ref: "#/components/schemas/uuid"
     ContactTemplates:
       type: array
-      default: []
       items:
         $ref: "#/components/schemas/ContactTemplate"
     SupplierTalent:
@@ -1880,7 +1904,6 @@ components:
           $ref: "#/components/schemas/Paging"
         talents:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/SupplierTalent"
         number_of_contacts:
@@ -1901,7 +1924,6 @@ components:
           $ref: "#/components/schemas/Paging"
         talents:
           type: array
-          default: []
           items:
             $ref: "#/components/schemas/ViewerTalent"
     ReviewQuestion:
@@ -2016,10 +2038,14 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/user_id"
-        logs:
-          type: array
-          items:
-            $ref: "#/components/schemas/BonusLog"
+        provisional_point_summary:
+          type: integer
+          description: 付与予定ポイント
+          example: 8000
+        exchangeable_point_summary:
+          type: integer
+          description: 交換可能ポイント
+          example: 5000
     Student:
       type: object
       properties:
