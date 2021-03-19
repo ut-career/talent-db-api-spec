@@ -1805,6 +1805,11 @@ components:
           description: コンタクト回数
           type: integer
           example: 1
+        accepted_at:
+          description: 承認した日時
+          type: string
+          format: date-time
+          example: "2020-09-10T09:12:28Z"
         talent_reviewed:
           description: 人材が評価をしたか。
           type: boolean
