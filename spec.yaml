@@ -988,6 +988,12 @@ paths:
       security: []
       parameters:
         - $ref: "#/components/parameters/fromCron"
+        - name: target_date
+          description: 指定した場合、指定した日に承認されたコンタクトを対象にします。
+          in: query
+          schema:
+            type: string
+            format: date
       responses:
         200:
           description: OK
@@ -1001,6 +1007,12 @@ paths:
       security: []
       parameters:
         - $ref: "#/components/parameters/fromCron"
+        - name: target_date
+          description: 指定した場合、指定した日に承認されたコンタクトを対象にします。
+          in: query
+          schema:
+            type: string
+            format: date
       responses:
         200:
           description: OK
