@@ -25,6 +25,8 @@ tags:
     description: コンタクト
   - name: bonus
     description: ボーナス
+  - name: batch
+    description: BATCH
 security:
   - api_key: []
 paths:
@@ -976,6 +978,19 @@ paths:
           $ref: "#/components/responses/Error"
         404:
           $ref: "#/components/responses/Error"
+  /batch/sendReviewRequestToStudent:
+    get:
+      tags: [batch]
+      summary: 学生へのレビュー依頼送信
+      description: レビュー依頼を学生に送信します
+      operationId: batch_send_review_request_to_student
+      x-openapi-router-controller: src.controllers.batch_controller
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/fromCron"
+      responses:
+        200:
+          description: OK
 
 components:
   securitySchemes:
@@ -1069,6 +1084,12 @@ components:
       in: header
       schema:
         type: string
+    fromCron:
+      name: X-Appengine-Cron
+      in: header
+      required: true
+      schema:
+        type: boolean
 
   responses:
     Student:
