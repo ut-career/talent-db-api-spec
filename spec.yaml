@@ -991,6 +991,19 @@ paths:
       responses:
         200:
           description: OK
+  /batch/sendReviewRequestToViewer:
+    get:
+      tags: [batch]
+      summary: エージェントへのレビュー依頼送信
+      description: レビュー依頼をエージェントに送信します
+      operationId: batch_send_review_request_to_viewer
+      x-openapi-router-controller: src.controllers.batch_controller
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/fromCron"
+      responses:
+        200:
+          description: OK
 
 components:
   securitySchemes:
