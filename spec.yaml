@@ -978,6 +978,38 @@ paths:
           $ref: "#/components/responses/Error"
         404:
           $ref: "#/components/responses/Error"
+  /bonuses/{bonus_id}/payouts:
+    post:
+      tags: [bonus]
+      summary: ボーナス払い出し
+      description: ボーナスをamazon gift cordにします
+      operationId: bonus_payouts_post
+      x-openapi-router-controller: src.controllers.bonus_controller
+      parameters:
+        - $ref: "#/components/parameters/bonus_id"
+        - $ref: "#/components/parameters/lineIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BonusPayoutsPostRequest"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BonusPayoutsPostResponse"
+        400:
+          $ref: "#/components/responses/Error"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+
   /batch/sendReviewRequestToStudent:
     get:
       tags: [batch]
@@ -2135,6 +2167,20 @@ components:
           type: integer
           description: 交換可能ポイント
           example: 5000
+    BonusPayoutsPostRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: integer
+          minimum: 5000
+    BonusPayoutsPostResponse:
+      type: object
+      properties:
+        gift_code:
+          type: string
+          example: PXRM-59KSBT-RRCN
     Student:
       type: object
       properties:
