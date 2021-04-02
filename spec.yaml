@@ -1001,6 +1001,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BonusPayoutsPostResponse"
+        202:
+          description: Accepted
         400:
           $ref: "#/components/responses/Error"
         401:
@@ -1008,6 +1010,47 @@ paths:
         403:
           $ref: "#/components/responses/Error"
         404:
+          $ref: "#/components/responses/Error"
+  
+  /agcods:
+    get:
+      tags: [bonus]
+      summary: アマゾンギフトカード一覧取得
+      description: アマゾンギフトカード一覧取得
+      operationId: agcods_get
+      x-openapi-router-controller: src.controllers.agcod_controller
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Agcods"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+  /agcods/{agcod_id}/cancel:
+    post:
+      tags: [bonus]
+      summary: ギフトコードのキャンセル
+      description: ギフトコードのキャンセル
+      operationId: agcod_cancel_post
+      x-openapi-router-controller: src.controllers.agcod_controller
+      parameters:
+        - $ref: "#/components/parameters/agcod_id"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgcodDetail"
+        400:
+          $ref: "#/components/responses/Error"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
           $ref: "#/components/responses/Error"
 
   /batch/sendReviewRequestToStudent:
@@ -1139,6 +1182,13 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/user_id"
+    agcod_id:
+      name: agcod_id
+      in: path
+      required: true
+      schema:
+        # F0000等でアクセスしたいため、uuidにしない
+        type: string
     target_ym:
       name: target_ym
       in: query
@@ -2181,6 +2231,44 @@ components:
         gift_code:
           type: string
           example: PXRM-59KSBT-RRCN
+    AgcodDetail:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/uuid"
+        partner_id:
+          type: string
+        bonus_log_id:
+          $ref: "#/components/schemas/uuid"
+        amount:
+          type: integer
+        currency_code:
+          type: string
+        gc_id:
+          type: string
+        gc_expiration_date:
+          type: string
+        card_status:
+          type: string
+        status:
+          type: string
+        error_code:
+          type: string
+        error_type:
+          type: string
+        error_message:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    Agcods:
+      type: object
+      properties:
+        paging:
+          $ref: "#/components/schemas/Paging"
+        items:
+          $ref: "#/components/schemas/AgcodDetail"
     Student:
       type: object
       properties:
