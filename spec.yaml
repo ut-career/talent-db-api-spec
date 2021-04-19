@@ -30,6 +30,18 @@ tags:
 security:
   - api_key: []
 paths:
+  /health:
+    get:
+      tags: [system]
+      summary: ヘルスチェック
+      description: ヘルスチェック
+      operationId: health_get
+      x-openapi-router-controller: src.controllers.health_controller
+      security: []
+      responses:
+        200:
+          description: ok
+
   /viewers/{viewer_id}:
     get:
       tags: [viewer]
