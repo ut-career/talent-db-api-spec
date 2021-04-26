@@ -1307,7 +1307,11 @@ components:
       example: "ca3c626a17cf429798a4f5ed10a6f1dd"
       x-faker: random.uuid
     user_id:
-      $ref: "#/components/schemas/uuid"
+      type: string
+      description: uuid
+      pattern: '[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}'
+      example: "ca3c626a17cf429798a4f5ed10a6f1dd"
+      x-faker: random.uuid
     user_name:
       type: string
       example: "dummy name"
