@@ -1328,11 +1328,7 @@ components:
       example: "ca3c626a17cf429798a4f5ed10a6f1dd"
       x-faker: random.uuid
     user_id:
-      type: string
-      description: uid
-      maxLength: 128
-      example: "5EBsIVfaq6XDXAjUjjvhTSxIvpa2"
-      x-faker: random.uuid
+      $ref: "#/components/schemas/uuid"
     user_name:
       type: string
       example: "dummy name"
