@@ -880,6 +880,7 @@ paths:
       x-openapi-router-controller: src.controllers.contact_controller
       parameters:
         - $ref: "#/components/parameters/lineIdToken"
+        - $ref: "#/components/parameters/firebaseIdToken"
       requestBody:
         required: true
         content:
@@ -1919,9 +1920,8 @@ components:
       example: UNREAD
     ContactCreate:
       type: object
+      description: senderではない、宛先のidは必須です。
       required:
-        - viewer_id
-        - talent_id
         - sender
         - title
         - message
