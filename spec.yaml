@@ -9,6 +9,8 @@ info:
 servers:
   - url: http://localhost:8080
 tags:
+  - name: system
+  - name: user
   - description: 提供者
     name: supplier
   - description: 閲覧者
@@ -41,6 +43,21 @@ paths:
       responses:
         200:
           description: ok
+  
+  /users:me:
+    get:
+      tags: [user]
+      summary: 自身を返却
+      description: 自身を返却
+      operationId: users_me
+      x-openapi-router-controller: src.controllers.user_controller
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
 
   /viewers/{viewer_id}:
     get:
@@ -1349,6 +1366,11 @@ components:
           $ref: "#/components/schemas/limit"
         total:
           $ref: "#/components/schemas/positive_integer_include_zero"
+    User:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/user_id"
     SupplierBase:
       type: object
       properties:
