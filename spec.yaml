@@ -780,44 +780,6 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         404:
           $ref: "#/components/responses/NotFoundError"
-  /student/contacts/{contact_id}/accept:
-    post:
-      tags: [student]
-      summary: 学生コンタクト承認
-      description: 学生コンタクト承認
-      operationId: student_contact_accept
-      x-openapi-router-controller: src.controllers.student_controller
-      parameters:
-        - $ref: "#/components/parameters/lineIdToken"
-        - $ref: "#/components/parameters/contact_id"
-      responses:
-        200:
-          description: OK
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        403:
-          $ref: '#/components/responses/ForbiddenError'
-        404:
-          $ref: "#/components/responses/NotFoundError"
-  /student/contacts/{contact_id}/refuse:
-    post:
-      tags: [student]
-      summary: 学生コンタクト辞退
-      description: 学生コンタクト辞退
-      operationId: student_contact_refuse
-      x-openapi-router-controller: src.controllers.student_controller
-      parameters:
-        - $ref: "#/components/parameters/lineIdToken"
-        - $ref: "#/components/parameters/contact_id"
-      responses:
-        200:
-          description: OK
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        403:
-          $ref: '#/components/responses/ForbiddenError'
-        404:
-          $ref: "#/components/responses/NotFoundError"
   /student/viewers:
     get:
       tags: [student]
@@ -931,21 +893,25 @@ paths:
           $ref: '#/components/responses/ForbiddenError'
         404:
           $ref: "#/components/responses/NotFoundError"
-  /contacts:updateStatus:
-    post:
+  /contacts/{contact_id}/status:
+    patch:
       tags: [contact]
       summary: コンタクトステータス更新
-      description: コンタクトステータス更新
-      operationId: contact_status_post
+      description: |
+        コンタクトステータス更新
+        ただし、未読状態にはできません。
+      operationId: contact_status_patch
       x-openapi-router-controller: src.controllers.contact_controller
       parameters:
+        - $ref: "#/components/parameters/contact_id"
         - $ref: "#/components/parameters/lineIdToken"
+        - $ref: "#/components/parameters/firebaseIdToken"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ContactStatusPostRequest"
+              $ref: "#/components/schemas/ContactStatusPatchRequest"
       responses:
         200:
           description: OK
@@ -2288,20 +2254,12 @@ components:
           $ref: '#/components/schemas/SupplierDetail'
         bonus:
           $ref: "#/components/schemas/Bonus"
-    ContactStatusPostRequest:
+    ContactStatusPatchRequest:
       type: object
       required:
-        - talent_id
-        - viewer_id
         - operator
         - status
       properties:
-        contact_id:
-          $ref: "#/components/schemas/uuid"
-        talent_id:
-          $ref: "#/components/schemas/user_id"
-        viewer_id:
-          $ref: "#/components/schemas/user_id"
         operator:
           $ref: "#/components/schemas/ContactSender"
         status:
