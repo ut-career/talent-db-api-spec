@@ -51,13 +51,17 @@ paths:
       description: 自身を返却
       operationId: users_me
       x-openapi-router-controller: src.controllers.user_controller
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/lineIdToken"
+        - $ref: "#/components/parameters/firebaseIdToken"
       responses:
         200:
           description: ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserBase"
 
   /viewers/{viewer_id}:
     get:
@@ -1366,7 +1370,7 @@ components:
           $ref: "#/components/schemas/limit"
         total:
           $ref: "#/components/schemas/positive_integer_include_zero"
-    User:
+    UserBase:
       type: object
       properties:
         id:
