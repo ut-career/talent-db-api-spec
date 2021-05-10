@@ -502,31 +502,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
-    post:
-      tags: [supplier]
-      summary: 供給者紹介者登録
-      description: 供給者の紹介者を登録します。
-      operationId: supplier_register_child
-      x-openapi-router-controller: src.controllers.supplier_controller
-      parameters:
-        - $ref: "#/components/parameters/supplier_id"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SupplierChildCreate"
-      responses:
-        200:
-          description: 取得成功
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SupplierChild"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          $ref: "#/components/responses/NotFoundError"
 
   /suppliers/{supplier_id}/specialStudent:
     post:
