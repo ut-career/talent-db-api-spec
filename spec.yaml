@@ -457,28 +457,6 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
         404:
           $ref: "#/components/responses/NotFoundError"
-  /suppliers/{supplier_id}/talents:
-    get:
-      tags: [supplier]
-      summary: 供給者人材取得
-      description: 供給者人材取得
-      operationId: supplier_get_talents
-      x-openapi-router-controller: src.controllers.supplier_controller
-      parameters:
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/supplier_id"
-      responses:
-        200:
-          description: 取得成功
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SupplierTalents"
-        401:
-          $ref: "#/components/responses/UnauthorizedError"
-        404:
-          $ref: "#/components/responses/NotFoundError"
   /suppliers/{supplier_id}/children:
     get:
       tags: [supplier]
@@ -1439,16 +1417,6 @@ components:
               $ref: "#/components/schemas/email"
     SupplierPatch:
       $ref: "#/components/schemas/SupplierBase"
-    SupplierChildBase:
-      type: object
-      required:
-        - name
-        - email
-      properties:
-        name:
-          $ref: "#/components/schemas/user_name"
-        email:
-          $ref: "#/components/schemas/email"
     SupplierChild:
       type: object
       properties:
@@ -1457,13 +1425,6 @@ components:
         current_ym_point:
           type: integer
           example: 5000
-    SupplierChildCreate:
-      allOf:
-        - $ref: "#/components/schemas/SupplierChildBase"
-        - type: object
-          properties:
-            name:
-              $ref: "#/components/schemas/user_name"
     SupplierChildren:
       type: object
       properties:
