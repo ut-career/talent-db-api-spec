@@ -64,20 +64,24 @@ paths:
                 $ref: "#/components/schemas/UserBase"
         401:
           $ref: "#/components/responses/Error"
-  /users/{user_id}/firebase_id:
-    post:
+  /users/{user_id}/firebase_id/{firebase_id}:
+    put:
       tags: [user]
       summary: firebase_idを登録
       description: firebase_idを登録
-      operationId: user_firebase_id_post
+      operationId: user_firebase_id_put
       x-openapi-router-controller: src.controllers.user_controller
       parameters:
-        - $ref: "#/components/parameters/firebaseIdToken"
         - name: user_id
           in: path
           required: true
           schema:
             $ref: "#/components/schemas/user_id"
+        - name: firebase_id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: ok
