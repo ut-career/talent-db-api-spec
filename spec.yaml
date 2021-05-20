@@ -93,7 +93,32 @@ paths:
           $ref: "#/components/responses/Error"
         409:
           $ref: "#/components/responses/Error"
-
+  /viewers:
+    post:
+      tags: [viewer]
+      summary: 閲覧者登録
+      description: 閲覧者登録
+      operationId: viewer_post
+      x-openapi-router-controller: src.controllers.viewer_controller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ViewerBase"
+      responses:
+        201:
+          description: 作成成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ViewerBase"
+        400:
+          description: bad request
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
   /viewers/{viewer_id}:
     get:
       tags: [viewer]
@@ -111,9 +136,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ViewerBase"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
     patch:
       tags: [viewer]
       summary: 閲覧者情報更新
@@ -138,9 +163,9 @@ paths:
         400:
           description: bad request
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /viewers/{viewer_id}/method:findContactAcceptedTalent:
     get:
       tags: [viewer]
@@ -163,7 +188,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Talent"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
           description: コンタクト承認済みの人材では無い場合
         404:
@@ -234,9 +259,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ViewerTalents"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /viewers/{viewer_id}/contactTemplates:
     get:
       tags: [viewer]
@@ -254,9 +279,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ContactTemplates"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
     put:
       tags: [viewer]
       summary: コンタクトテンプレート一件作成・更新
@@ -281,9 +306,9 @@ paths:
         400:
           description: bad request
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /viewers/{viewer_id}/contactTemplates/{contact_template_id}:
     delete:
       tags: [viewer]
@@ -306,9 +331,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ContactTemplates"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /viewers/{viewer_id}/contacts:
     get:
       tags: [viewer]
@@ -332,9 +357,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ViewerContacts"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /viewers/{viewer_id}/contacts/{contact_id}:
     get:
       tags: [viewer]
@@ -353,9 +378,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ViewerContact"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /viewers/{viewer_id}/reviews:
     post:
       tags: [viewer]
@@ -435,9 +460,9 @@ paths:
         400:
           description: bad request
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
     patch:
       tags: [supplier]
       summary: 供給者情報更新
@@ -462,9 +487,9 @@ paths:
         400:
           description: bad request
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /suppliers/{supplier_id}/children:
     get:
       tags: [supplier]
@@ -485,9 +510,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/SupplierChildren"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
 
   /suppliers/{supplier_id}/specialStudent:
     post:
@@ -510,9 +535,9 @@ paths:
         400:
           description: invite_idが使用済み
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
       
   /supplierSpecialStudentInvites/{supplier_ss_invite_id}:
     get:
@@ -531,9 +556,9 @@ paths:
         200:
           description: invite_idが使用可能
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
         410:
           description: invite_idが使用済み
   
@@ -554,7 +579,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ReviewQuestion'
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
 
   /talents/{talent_id}/reviews:
     post:
@@ -604,7 +629,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ReviewQuestion'
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
   
   /student/:
     get:
@@ -620,9 +645,9 @@ paths:
         200:
           $ref: '#/components/responses/Student'
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
     patch:
       tags: [student]
       summary: 学生更新
@@ -641,11 +666,11 @@ paths:
         200:
           $ref: '#/components/responses/Student'
         400:
-          $ref: '#/components/responses/BadRequestError'
+          $ref: '#/components/responses/Error'
         401:
           $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
     delete:
       tags: [student]
       summary: 学生退会
@@ -685,11 +710,11 @@ paths:
         200:
           $ref: '#/components/responses/Student'
         400:
-          $ref: '#/components/responses/BadRequestError'
+          $ref: '#/components/responses/Error'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/Error'
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
         409:
           description: Conflict
   /student:signUpWithLine:
@@ -711,11 +736,11 @@ paths:
         201:
           $ref: '#/components/responses/Student'
         400:
-          $ref: '#/components/responses/BadRequestError'
+          $ref: '#/components/responses/Error'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/Error'
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
         409:
           description: Conflict
   /student/children:
@@ -737,9 +762,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/SupplierTalents"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
   /student/contacts:
     get:
       tags: [student]
@@ -763,9 +788,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/TalentContacts"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
   /student/contacts/{contact_id}:
     get:
       tags: [student]
@@ -784,11 +809,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/TalentContact"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /student/viewers:
     get:
       tags: [student]
@@ -815,9 +840,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/TalentViewers"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
   /student/viewers/{viewer_id}:
     get:
       tags: [student]
@@ -836,11 +861,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/TalentViewer"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
 
   /contacts:
     post:
@@ -868,9 +893,9 @@ paths:
         400:
           description: bad request
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: "#/components/responses/ForbiddenError"
+          $ref: "#/components/responses/Error"
         409:
           description: Conflict
           content:
@@ -897,11 +922,11 @@ paths:
         400:
           $ref: "#/components/responses/Error"
         401:
-          $ref: "#/components/responses/UnauthorizedError"
+          $ref: "#/components/responses/Error"
         403:
-          $ref: '#/components/responses/ForbiddenError'
+          $ref: '#/components/responses/Error'
         404:
-          $ref: "#/components/responses/NotFoundError"
+          $ref: "#/components/responses/Error"
   /contacts/{contact_id}/status:
     patch:
       tags: [contact]
