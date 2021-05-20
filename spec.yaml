@@ -105,14 +105,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ViewerBase"
+              $ref: "#/components/schemas/ViewerCreate"
       responses:
         201:
           description: 作成成功
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ViewerBase"
+                $ref: "#/components/schemas/ViewerCreate"
         400:
           description: bad request
         401:
@@ -1508,6 +1508,19 @@ components:
           example: 50~100人
         review_summary_point:
           $ref: '#/components/schemas/review_summary_point'
+    ViewerCreate:
+      type: object
+      required:
+        - company_name
+        - staff_name
+      properties:
+        company_name:
+          type: string
+          example: 株式会社kokoroe
+        staff_name:
+          allOf:
+            - $ref: "#/components/schemas/user_name"
+          description: 担当者名
     Viewer:
       type: object
       required:
