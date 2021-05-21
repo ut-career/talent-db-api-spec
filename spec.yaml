@@ -112,6 +112,32 @@ paths:
           $ref: "#/components/responses/Error"
         403:
           $ref: "#/components/responses/Error"
+  /userInvites/{user_invite_id}:
+    get:
+      tags: [user]
+      summary: 招待コード検証
+      description: 招待コード検証
+      operationId: user_invite_get
+      x-openapi-router-controller: src.controllers.user_invite_controller
+      parameters:
+        - name: user_invite_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        200:
+          description: invite_idが使用可能
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInviteBase"
+        401:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        410:
+          description: invite_idが使用済み
 
   /viewers:
     post:
