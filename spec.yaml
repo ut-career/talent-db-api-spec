@@ -64,6 +64,63 @@ paths:
                 $ref: "#/components/schemas/UserBase"
         401:
           $ref: "#/components/responses/Error"
+
+  /users/{user_id}/invite:
+    get:
+      tags: [user]
+      summary: invite_idを取得
+      description: invite_idを取得
+      operationId: users_invite_get
+      x-openapi-router-controller: src.controllers.user_controller
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/user_id"
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInviteBase"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+  /users/{user_id}/invite/{user_invite_id}:
+    put:
+      tags: [user]
+      summary: invite_idを設定
+      description: invite_idを設定
+      operationId: users_invite_put
+      x-openapi-router-controller: src.controllers.user_controller
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/user_id"
+        - name: user_invite_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        200:
+          description: ok
+        400:
+          $ref: "#/components/responses/Error"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+
   /users/{user_id}/firebase_id/{firebase_id}:
     put:
       tags: [user]
