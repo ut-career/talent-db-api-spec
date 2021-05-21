@@ -93,6 +93,26 @@ paths:
           $ref: "#/components/responses/Error"
         409:
           $ref: "#/components/responses/Error"
+      
+  /userInvites:
+    post:
+      tags: [user]
+      summary: 招待コード作成
+      description: 招待コード作成
+      operationId: user_invite_post
+      x-openapi-router-controller: src.controllers.user_invite_controller
+      responses:
+        201:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInviteBase"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+
   /viewers:
     post:
       tags: [viewer]
@@ -2299,3 +2319,10 @@ components:
           $ref: "#/components/schemas/ContactSender"
         status:
           $ref: "#/components/schemas/ContactStatus"
+    UserInviteBase:
+      type: object
+      properties:
+        id:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/uuid'
