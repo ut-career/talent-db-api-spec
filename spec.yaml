@@ -215,7 +215,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ViewerCreate"
+                $ref: "#/components/schemas/ViewerBase"
         400:
           description: bad request
         401:
