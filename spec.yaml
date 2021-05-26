@@ -121,6 +121,32 @@ paths:
         404:
           $ref: "#/components/responses/Error"
 
+  /users/{user_id}/firebase_id:
+    get:
+      tags: [user]
+      summary: firebase_idを取得
+      description: firebase_idを取得
+      operationId: users_firebase_id_get
+      x-openapi-router-controller: src.controllers.user_controller
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/user_id"
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserFirebaseIdBase"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
   /users/{user_id}/firebase_id/{firebase_id}:
     put:
       tags: [user]
@@ -172,8 +198,8 @@ paths:
   /userInvites/{user_invite_id}:
     get:
       tags: [user]
-      summary: 招待コード検証
-      description: 招待コード検証
+      summary: 招待コード取得
+      description: 招待コード取得
       operationId: user_invite_get
       x-openapi-router-controller: src.controllers.user_invite_controller
       parameters:
@@ -184,7 +210,7 @@ paths:
             $ref: "#/components/schemas/uuid"
       responses:
         200:
-          description: invite_idが使用可能
+          description: ok
           content:
             application/json:
               schema:
@@ -194,7 +220,7 @@ paths:
         404:
           $ref: "#/components/responses/Error"
         410:
-          description: invite_idが使用済み
+          description: invite_idが期限切れ
 
   /viewers:
     post:
@@ -2409,3 +2435,15 @@ components:
           readOnly: true
           allOf:
             - $ref: '#/components/schemas/uuid'
+        user_id:
+          $ref: "#/components/schemas/user_id"
+    UserFirebaseIdBase:
+      type: object
+      required:
+        - user_id
+      properties:
+        id:
+          readOnly: true
+          type: string
+        user_id:
+          $ref: "#/components/schemas/user_id"
