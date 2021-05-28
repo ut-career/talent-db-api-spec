@@ -217,10 +217,33 @@ paths:
                 $ref: "#/components/schemas/UserInviteBase"
         401:
           $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
         404:
           $ref: "#/components/responses/Error"
         410:
           description: invite_idが期限切れ
+    delete:
+      tags: [user]
+      summary: 招待コード削除
+      description: 招待コード削除
+      operationId: user_invite_delete
+      x-openapi-router-controller: src.controllers.user_invite_controller
+      parameters:
+        - name: user_invite_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/uuid"
+      responses:
+        204:
+          description: ok
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
 
   /viewers:
     post:
