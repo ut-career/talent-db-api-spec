@@ -1624,6 +1624,8 @@ components:
           example: 100000
     ViewerBase:
       type: object
+      required:
+        - name
       properties:
         id:
           readOnly: true
@@ -1632,6 +1634,16 @@ components:
         company_name:
           type: string
           example: 株式会社kokoroe
+        name:
+          allOf:
+            - $ref: "#/components/schemas/user_name"
+          deprecated: true
+          description: 会社名
+        company_homepage_urls:
+          type: array
+          items:
+            type: string
+          example: [https://ut-c.co.jp, https://ut-career.com]
         staff_name:
           allOf:
             - $ref: "#/components/schemas/user_name"
@@ -1673,44 +1685,9 @@ components:
           allOf:
             - $ref: "#/components/schemas/user_name"
           description: 担当者名
-    Viewer:
-      type: object
-      required:
-        - name
-      properties:
-        id:
-          readOnly: true
-          allOf:
-            - $ref: "#/components/schemas/user_id"
-        name:
-          $ref: "#/components/schemas/user_name"
-        work_locations:
-          title: 紹介可能な地域
-          type: array
-          items:
-            type: string
-          example: [東京都, 神奈川県]
-        jobs:
-          title: 得意職種
-          type: array
-          items:
-            type: string
-          example: [営業, SE]
-        company_types:
-          title: 得意企業規模
-          type: array
-          items:
-            type: string
-          example: [大企業, ベンチャー企業, 老舗]
-        results:
-          title: 紹介実績
-          type: string
-          example: 10~30人
-        review_summary_point:
-          $ref: '#/components/schemas/review_summary_point'
     TalentViewer:
       allOf:
-        - $ref: "#/components/schemas/Viewer"
+        - $ref: "#/components/schemas/ViewerBase"
         - type: object
           properties:
             contact:
@@ -2169,7 +2146,7 @@ components:
         - type: object
           properties:
             viewer:
-              $ref: "#/components/schemas/Viewer"
+              $ref: "#/components/schemas/ViewerBase"
     TalentContacts:
       type: object
       properties:
@@ -2322,7 +2299,7 @@ components:
         reviewer:
           readOnly: true
           allOf:
-            - $ref: '#/components/schemas/Viewer'
+            - $ref: '#/components/schemas/ViewerBase'
         reviewer_id:
           writeOnly: true
           allOf:
