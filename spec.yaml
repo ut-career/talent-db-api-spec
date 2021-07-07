@@ -1643,6 +1643,7 @@ components:
           type: array
           items:
             type: string
+            pattern: ^https?://.+$
           example: [https://ut-c.co.jp, https://ut-career.com]
         staff_name:
           allOf:
