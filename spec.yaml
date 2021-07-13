@@ -1722,6 +1722,8 @@ components:
           example: 普通自動車免許
         acquired_year_month:
           $ref: "#/components/schemas/year_month"
+        is_plan:
+          type: boolean
     Education:
       type: object
       required:
@@ -1888,6 +1890,9 @@ components:
               acquired_year_month: null
             - name: 大型自動車免許
               acquired_year_month: 2019-03
+            - name: UT資格
+              acquired_year_month: null
+              is_plan: true
         educations:
           type: array
           items:
