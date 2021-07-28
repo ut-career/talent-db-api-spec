@@ -1292,6 +1292,25 @@ paths:
       responses:
         200:
           description: OK
+  /batch/sendRemindersForProfileUpdateToTalent:
+    get:
+      tags: [batch]
+      summary: 人材へのプロフィール更新のリマインド
+      description: 人材へのプロフィール更新のリマインド
+      operationId: batch_send_reminders_for_profile_update_to_talent
+      x-openapi-router-controller: src.controllers.batch_controller
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/fromCron"
+        - name: target_date
+          description: 指定した場合、指定した日に実行されたものとして扱います。
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: OK
 
 components:
   securitySchemes:
