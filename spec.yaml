@@ -1934,7 +1934,7 @@ components:
           description: 希望職種
           items:
             type: string
-          example: ["法人営業", "社内SE"]
+          example: ["営業系", "企画、マーケティング、経営系"]
         preferred_work_locations:
           type: array
           description: 希望勤務地
