@@ -1944,7 +1944,7 @@ components:
         commutable_time:
           type: string
           description: 通勤可能時間
-          example: 30分
+          example: ~30分
         desired_salary:
           type: integer
           description: 希望年収
