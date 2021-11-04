@@ -1079,6 +1079,43 @@ paths:
           $ref: '#/components/responses/Error'
         404:
           $ref: "#/components/responses/Error"
+  /contacts/{contact_id}/messages:
+    post:
+      tags: [contact]
+      summary: コンタクトメッセージ追加
+      description: |
+        # コンタクトにメッセージを追加
+        承認済みのコンタクトにのみ追加できます。
+        
+        viewerからtalentに追加された場合、talentに通知を送信します。
+        ## roles
+        - viewer
+      operationId: contact_messages_post
+      x-openapi-router-controller: src.controllers.contact_controller
+      parameters:
+        - $ref: "#/components/parameters/contact_id"
+        - $ref: "#/components/parameters/firebaseIdToken"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactMessagesPostRequest"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactBase"
+        400:
+          $ref: "#/components/responses/Error"
+        401:
+          $ref: "#/components/responses/Error"
+        403:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
   /contacts/{contact_id}/status:
     patch:
       tags: [contact]
@@ -2187,6 +2224,18 @@ components:
           $ref: "#/components/schemas/positive_integer_include_zero"
         number_of_accepted_contacts:
           $ref: "#/components/schemas/positive_integer_include_zero"
+    ContactMessagesPostRequest:
+      type: object
+      properties:
+        sender:
+          $ref: "#/components/schemas/ContactSender"
+        title:
+          type: string
+          maxLength: 50
+          example: コンタクト件名例
+        message:
+          type: string
+          example: コンタクトメッセージ内容例
     ContactTemplateBase:
       type: object
       required:
